@@ -1,0 +1,48 @@
+NAMELIST
+&GLOBAL      hcm=0.05  lmax=25  elab=25.5 thmin=0. thmax=180. prior=f printf=f dwba=1  lxmax=15
+             thinc=1   nx=34 rmax=100   nr=120  /
+
+
+
+&SYSTEM     namep='d'     massp=2.       zp=1.0    jp=0. sbx=0.
+            namet='93Nb'  masst=93.0     zt=41.0   jt=0.0  qval=-2.224
+            nameb='p'     massb=1.0078        zb=1.0    jb=0.  neb=28
+            namex='n'     massx=1.0087   zx=0.0    jx=0.  lbx=0    nodes=1  /
+
+
+&OUTGOING   ecmbmin=14 ecmbmax=14 ecmbh=1  bin=0  wbin=0.0 /
+
+
+&OUTGOING /
+
+
+&POTENTIAL  kp1='a' kp2=1 ptype=10 a1=0 a2=93 rc=1.3
+
+            /
+
+
+
+&POTENTIAL  kp1='b'  kp2=1 ptype=3 a1=0 a2=94
+           /
+
+
+&POTENTIAL  kp1='x'  kp2=1 ptype=3 a1=0 a2=93
+
+            /
+
+&POTENTIAL  kp1='p'  kp2=1 ptype=2 a1=1 a2=1 rc=1.5
+            uv=72.15 av=1.484
+            /
+
+&POTENTIAL  kp1='t'  kp2=1 ptype=3 a1=0 a2=93
+           /
+
+
+
+&POTENTIAL /
+
+
+
+
+
+&vincent  Pi_ext_ny=50  Pi_ext_ymax=50  VF=t/

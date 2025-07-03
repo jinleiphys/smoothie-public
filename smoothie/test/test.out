@@ -1,0 +1,1676 @@
+/*===========================================================================*\\
+|                                                                            |
+|   ███████╗███╗   ███╗ ██████╗  ██████╗ ████████╗██╗  ██╗██╗███████╗        |
+|   ██╔════╝████╗ ████║██╔═══██╗██╔═══██╗╚══██╔══╝██║  ██║██║██╔════╝        |
+|   ███████╗██╔████╔██║██║   ██║██║   ██║   ██║   ███████║██║█████╗          |
+|   ╚════██║██║╚██╔╝██║██║   ██║██║   ██║   ██║   ██╔══██║██║██╔══╝          |
+|   ███████║██║ ╚═╝ ██║╚██████╔╝╚██████╔╝   ██║   ██║  ██║██║███████╗        |
+|   ╚══════╝╚═╝     ╚═╝ ╚═════╝  ╚═════╝    ╚═╝   ╚═╝  ╚═╝╚═╝╚══════╝        |
+|                                                                            |
+|   **** Scattering Model of Optical Operator Theory for                     |
+|   **** Ichimura-Austern-Vincent Equations                                  |
+|                                                                            |
+|*==========================================================================*|
+|                                                                            |
+|   **** IAV FORMALISM CALCULATIONS                                          |
+|                                                                            |
+|   **** Non-elastic breakup calculations in inclusive breakup reactions     |
+|                                                                            |
+|   **** Jin Lei and Antonio M. Moro                                         |
+|                                                                            |
+|   **** a(=b+x) + A -> b + B, where B = (x+A)                               |
+|                                                                            |
+\\*==========================================================================*/
+
+╔════════════════════════════════════════════════════════════════════════╗
+║ Initializing...  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱  75%                        ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+Assuming the reaction has the form:
+    d    +  93Nb -->  p    +  n    +  93Nb -->  p    +  (n    +  93Nb )-->  p    + anything
+Centre-of-mass Range is  1000*0.050 fm. Maximum at   50.000 fm.
+Range of angular momentum l is 0 <= l <= 25
+
+***************************************************************************
+*                          REACTION SYSTEMS                               *
+***************************************************************************
+Project=d     MASS =   2.0000 Z =   1.0 Jp =  0.0
+Target =93Nb  MASS =  93.0000 Z =  41.0 Jt =  0.0
+--------------------------------------------------------
+Targeb =p     MASS =   1.0078 Z =   1.0 Jb =  0.0
+Targex =n     MASS =   1.0087 Z =   0.0 Jx =  0.0
+***************************************************************************
+
+***************************************************************************
+*                          DEFINED POTENTIALS                             *
+***************************************************************************
+ KP1#  KP2#       TYPE            SHAPE
+   a   1     Coulomb          CHARGE          a1=   0.000   a2=  93.000   rc= 1.300
+   a   1     Volume           1=Woods-Saxon    v= 77.300    av= 0.770   rv= 1.150 w=  6.100 aw= 0.470 rw= 1.330
+   a   1     Surface          1=Woods-Saxon    vd=  0.000  rvd= 0.000  avd= 0.100  wd=  8.400  rwd= 1.370  awd= 0.770
+--------------------------------------------------------
+   b   1     Coulomb          CHARGE          a1=   0.000   a2=  94.000   rc= 1.300
+   b   1     Volume           4=ch89           v=-99.000    av= 0.100   rv= 0.000 w=  0.000 aw= 0.100 rw= 0.000
+--------------------------------------------------------
+   x   1     Coulomb          CHARGE          a1=   0.000   a2=  93.000   rc= 1.300
+   x   1     Volume           4=ch89           v=-99.000    av= 0.100   rv= 0.000 w=  0.000 aw= 0.100 rw= 0.000
+--------------------------------------------------------
+   p   1     Coulomb          CHARGE          a1=   1.000   a2=   1.000   rc= 1.500
+   p   1     Volume           2=Gaussian       v= 72.150    av= 1.484   rv= 0.000 w=  0.000 aw= 0.100 rw= 0.000
+--------------------------------------------------------
+   t   1     Coulomb          CHARGE          a1=   0.000   a2=  93.000   rc= 1.300
+   t   1     Volume           4=ch89           v=-99.000    av= 0.100   rv= 0.000 w=  0.000 aw= 0.100 rw= 0.000
+***************************************************************************
+
+***************************************************************************
+*                      ELASTIC S-MATRIX ELEMENTS                          *
+***************************************************************************
+nch=  1  S-matrix = (  0.058232746, -0.007543418)
+nch=  2  S-matrix = ( -0.065293916, -0.034421684)
+nch=  3  S-matrix = ( -0.035061328,  0.045887032)
+nch=  4  S-matrix = (  0.066006477,  0.021478132)
+nch=  5  S-matrix = (  0.053341374, -0.028789901)
+nch=  6  S-matrix = ( -0.053688300, -0.015567901)
+nch=  7  S-matrix = ( -0.083777698,  0.014107019)
+nch=  8  S-matrix = (  0.014771784, -0.049193733)
+nch=  9  S-matrix = (  0.106707193, -0.133868430)
+nch= 10  S-matrix = (  0.234053624, -0.063413603)
+nch= 11  S-matrix = (  0.464684705,  0.025194822)
+nch= 12  S-matrix = (  0.681852954,  0.073686524)
+nch= 13  S-matrix = (  0.846235938,  0.062745389)
+nch= 14  S-matrix = (  0.930525243,  0.035710690)
+nch= 15  S-matrix = (  0.968914442,  0.017752498)
+nch= 16  S-matrix = (  0.986079996,  0.008358163)
+nch= 17  S-matrix = (  0.993757869,  0.003839146)
+nch= 18  S-matrix = (  0.997199287,  0.001743192)
+nch= 19  S-matrix = (  0.998743582,  0.000784079)
+nch= 20  S-matrix = (  0.999436682,  0.000352214)
+nch= 21  S-matrix = (  0.999747626,  0.000156846)
+nch= 22  S-matrix = (  0.999887027,  0.000068355)
+nch= 23  S-matrix = (  0.999949471,  0.000030759)
+nch= 24  S-matrix = (  0.999977418,  0.000011837)
+nch= 25  S-matrix = (  0.999989916,  0.000004508)
+nch= 26  S-matrix = (  0.999995500,  0.000001880)
+***************************************************************************
+
+  ----------------------
+  PROJECTILE BOUND STATE
+  ----------------------
+  Nb of nodes=           1
+ Now print the mean root square of the radius
+@nch=  1  3.856879  2.224280
+  Adjust potential depth from   72.150 to   72.164 with scaling factor   1.000
+ ANC=   0.87060
+Threshold at Eb=  22.7392
+Now initial the value of Y function 
+                    (CPU  time =        0.68  seconds)
+--------------------------------------------------------
+Now calculating the x-sec at Eb= 10.000
+Using finite range DWBA in IVA-prior form
+calculating cross section alpha_xA dependence 
+
+For alpha_xA=   1
+there are       26  channel couplings to be solved
+xsec=            0.26861
+
+For alpha_xA=   2
+there are       50  channel couplings to be solved
+xsec=            0.83845
+
+For alpha_xA=   3
+there are       73  channel couplings to be solved
+xsec=            1.43360
+
+For alpha_xA=   4
+there are       94  channel couplings to be solved
+xsec=            1.95067
+
+For alpha_xA=   5
+there are      114  channel couplings to be solved
+xsec=            3.26791
+
+For alpha_xA=   6
+there are      132  channel couplings to be solved
+xsec=            2.86808
+
+For alpha_xA=   7
+there are      149  channel couplings to be solved
+xsec=            5.67054
+
+For alpha_xA=   8
+there are      164  channel couplings to be solved
+xsec=            1.99802
+
+For alpha_xA=   9
+there are      178  channel couplings to be solved
+xsec=            0.85048
+
+For alpha_xA=  10
+there are      190  channel couplings to be solved
+xsec=            0.42999
+
+For alpha_xA=  11
+there are      201  channel couplings to be solved
+xsec=            0.22841
+
+For alpha_xA=  12
+there are      210  channel couplings to be solved
+xsec=            0.12135
+
+For alpha_xA=  13
+there are      218  channel couplings to be solved
+xsec=            0.06512
+
+                    (CPU  time =        2.43  seconds)
+--------------------------------------------------------
+alpha_xA =   1     X-sec =    0.2686
+alpha_xA =   2     X-sec =    0.8384
+alpha_xA =   3     X-sec =    1.4336
+alpha_xA =   4     X-sec =    1.9507
+alpha_xA =   5     X-sec =    3.2679
+alpha_xA =   6     X-sec =    2.8681
+alpha_xA =   7     X-sec =    5.6705
+alpha_xA =   8     X-sec =    1.9980
+alpha_xA =   9     X-sec =    0.8505
+alpha_xA =  10     X-sec =    0.4300
+alpha_xA =  11     X-sec =    0.2284
+alpha_xA =  12     X-sec =    0.1213
+alpha_xA =  13     X-sec =    0.0651
+The double differential cross sections
+
+theta =   0.00     X-sec =    4.3669
+theta =   1.00     X-sec =    4.3862
+theta =   2.00     X-sec =    4.4435
+theta =   3.00     X-sec =    4.5369
+theta =   4.00     X-sec =    4.6636
+theta =   5.00     X-sec =    4.8194
+theta =   6.00     X-sec =    4.9995
+theta =   7.00     X-sec =    5.1986
+theta =   8.00     X-sec =    5.4111
+theta =   9.00     X-sec =    5.6317
+theta =  10.00     X-sec =    5.8560
+theta =  11.00     X-sec =    6.0800
+theta =  12.00     X-sec =    6.3009
+theta =  13.00     X-sec =    6.5165
+theta =  14.00     X-sec =    6.7251
+theta =  15.00     X-sec =    6.9250
+theta =  16.00     X-sec =    7.1145
+theta =  17.00     X-sec =    7.2915
+theta =  18.00     X-sec =    7.4538
+theta =  19.00     X-sec =    7.5988
+theta =  20.00     X-sec =    7.7240
+theta =  21.00     X-sec =    7.8268
+theta =  22.00     X-sec =    7.9051
+theta =  23.00     X-sec =    7.9568
+theta =  24.00     X-sec =    7.9801
+theta =  25.00     X-sec =    7.9736
+theta =  26.00     X-sec =    7.9359
+theta =  27.00     X-sec =    7.8665
+theta =  28.00     X-sec =    7.7650
+theta =  29.00     X-sec =    7.6320
+theta =  30.00     X-sec =    7.4691
+theta =  31.00     X-sec =    7.2785
+theta =  32.00     X-sec =    7.0636
+theta =  33.00     X-sec =    6.8285
+theta =  34.00     X-sec =    6.5776
+theta =  35.00     X-sec =    6.3157
+theta =  36.00     X-sec =    6.0473
+theta =  37.00     X-sec =    5.7766
+theta =  38.00     X-sec =    5.5069
+theta =  39.00     X-sec =    5.2410
+theta =  40.00     X-sec =    4.9807
+theta =  41.00     X-sec =    4.7272
+theta =  42.00     X-sec =    4.4811
+theta =  43.00     X-sec =    4.2426
+theta =  44.00     X-sec =    4.0114
+theta =  45.00     X-sec =    3.7876
+theta =  46.00     X-sec =    3.5709
+theta =  47.00     X-sec =    3.3616
+theta =  48.00     X-sec =    3.1598
+theta =  49.00     X-sec =    2.9660
+theta =  50.00     X-sec =    2.7809
+theta =  51.00     X-sec =    2.6052
+theta =  52.00     X-sec =    2.4395
+theta =  53.00     X-sec =    2.2844
+theta =  54.00     X-sec =    2.1406
+theta =  55.00     X-sec =    2.0083
+theta =  56.00     X-sec =    1.8875
+theta =  57.00     X-sec =    1.7782
+theta =  58.00     X-sec =    1.6801
+theta =  59.00     X-sec =    1.5926
+theta =  60.00     X-sec =    1.5151
+theta =  61.00     X-sec =    1.4468
+theta =  62.00     X-sec =    1.3869
+theta =  63.00     X-sec =    1.3345
+theta =  64.00     X-sec =    1.2890
+theta =  65.00     X-sec =    1.2494
+theta =  66.00     X-sec =    1.2150
+theta =  67.00     X-sec =    1.1850
+theta =  68.00     X-sec =    1.1587
+theta =  69.00     X-sec =    1.1354
+theta =  70.00     X-sec =    1.1145
+theta =  71.00     X-sec =    1.0953
+theta =  72.00     X-sec =    1.0773
+theta =  73.00     X-sec =    1.0600
+theta =  74.00     X-sec =    1.0432
+theta =  75.00     X-sec =    1.0264
+theta =  76.00     X-sec =    1.0096
+theta =  77.00     X-sec =    0.9927
+theta =  78.00     X-sec =    0.9755
+theta =  79.00     X-sec =    0.9581
+theta =  80.00     X-sec =    0.9405
+theta =  81.00     X-sec =    0.9226
+theta =  82.00     X-sec =    0.9044
+theta =  83.00     X-sec =    0.8858
+theta =  84.00     X-sec =    0.8667
+theta =  85.00     X-sec =    0.8469
+theta =  86.00     X-sec =    0.8264
+theta =  87.00     X-sec =    0.8051
+theta =  88.00     X-sec =    0.7830
+theta =  89.00     X-sec =    0.7601
+theta =  90.00     X-sec =    0.7366
+theta =  91.00     X-sec =    0.7126
+theta =  92.00     X-sec =    0.6881
+theta =  93.00     X-sec =    0.6635
+theta =  94.00     X-sec =    0.6389
+theta =  95.00     X-sec =    0.6144
+theta =  96.00     X-sec =    0.5901
+theta =  97.00     X-sec =    0.5660
+theta =  98.00     X-sec =    0.5422
+theta =  99.00     X-sec =    0.5189
+theta = 100.00     X-sec =    0.4959
+theta = 101.00     X-sec =    0.4735
+theta = 102.00     X-sec =    0.4516
+theta = 103.00     X-sec =    0.4304
+theta = 104.00     X-sec =    0.4100
+theta = 105.00     X-sec =    0.3905
+theta = 106.00     X-sec =    0.3721
+theta = 107.00     X-sec =    0.3547
+theta = 108.00     X-sec =    0.3384
+theta = 109.00     X-sec =    0.3232
+theta = 110.00     X-sec =    0.3091
+theta = 111.00     X-sec =    0.2960
+theta = 112.00     X-sec =    0.2838
+theta = 113.00     X-sec =    0.2726
+theta = 114.00     X-sec =    0.2621
+theta = 115.00     X-sec =    0.2524
+theta = 116.00     X-sec =    0.2435
+theta = 117.00     X-sec =    0.2353
+theta = 118.00     X-sec =    0.2279
+theta = 119.00     X-sec =    0.2212
+theta = 120.00     X-sec =    0.2152
+theta = 121.00     X-sec =    0.2100
+theta = 122.00     X-sec =    0.2056
+theta = 123.00     X-sec =    0.2018
+theta = 124.00     X-sec =    0.1987
+theta = 125.00     X-sec =    0.1961
+theta = 126.00     X-sec =    0.1940
+theta = 127.00     X-sec =    0.1924
+theta = 128.00     X-sec =    0.1912
+theta = 129.00     X-sec =    0.1903
+theta = 130.00     X-sec =    0.1897
+theta = 131.00     X-sec =    0.1893
+theta = 132.00     X-sec =    0.1892
+theta = 133.00     X-sec =    0.1892
+theta = 134.00     X-sec =    0.1894
+theta = 135.00     X-sec =    0.1897
+theta = 136.00     X-sec =    0.1900
+theta = 137.00     X-sec =    0.1904
+theta = 138.00     X-sec =    0.1907
+theta = 139.00     X-sec =    0.1910
+theta = 140.00     X-sec =    0.1912
+theta = 141.00     X-sec =    0.1913
+theta = 142.00     X-sec =    0.1912
+theta = 143.00     X-sec =    0.1911
+theta = 144.00     X-sec =    0.1909
+theta = 145.00     X-sec =    0.1905
+theta = 146.00     X-sec =    0.1901
+theta = 147.00     X-sec =    0.1896
+theta = 148.00     X-sec =    0.1891
+theta = 149.00     X-sec =    0.1885
+theta = 150.00     X-sec =    0.1879
+theta = 151.00     X-sec =    0.1873
+theta = 152.00     X-sec =    0.1867
+theta = 153.00     X-sec =    0.1862
+theta = 154.00     X-sec =    0.1856
+theta = 155.00     X-sec =    0.1851
+theta = 156.00     X-sec =    0.1846
+theta = 157.00     X-sec =    0.1842
+theta = 158.00     X-sec =    0.1838
+theta = 159.00     X-sec =    0.1834
+theta = 160.00     X-sec =    0.1831
+theta = 161.00     X-sec =    0.1828
+theta = 162.00     X-sec =    0.1826
+theta = 163.00     X-sec =    0.1823
+theta = 164.00     X-sec =    0.1821
+theta = 165.00     X-sec =    0.1820
+theta = 166.00     X-sec =    0.1818
+theta = 167.00     X-sec =    0.1817
+theta = 168.00     X-sec =    0.1815
+theta = 169.00     X-sec =    0.1812
+theta = 170.00     X-sec =    0.1809
+theta = 171.00     X-sec =    0.1805
+theta = 172.00     X-sec =    0.1800
+theta = 173.00     X-sec =    0.1794
+theta = 174.00     X-sec =    0.1788
+theta = 175.00     X-sec =    0.1782
+theta = 176.00     X-sec =    0.1776
+theta = 177.00     X-sec =    0.1770
+theta = 178.00     X-sec =    0.1766
+theta = 179.00     X-sec =    0.1763
+theta = 180.00     X-sec =    0.1762
+Now calculating the x-sec at Eb= 11.000
+Using finite range DWBA in IVA-prior form
+calculating cross section alpha_xA dependence 
+
+For alpha_xA=   1
+there are       26  channel couplings to be solved
+xsec=            0.37046
+
+For alpha_xA=   2
+there are       50  channel couplings to be solved
+xsec=            1.18691
+
+For alpha_xA=   3
+there are       73  channel couplings to be solved
+xsec=            2.03188
+
+For alpha_xA=   4
+there are       94  channel couplings to be solved
+xsec=            2.86746
+
+For alpha_xA=   5
+there are      114  channel couplings to be solved
+xsec=            4.96944
+
+For alpha_xA=   6
+there are      132  channel couplings to be solved
+xsec=            4.23915
+
+For alpha_xA=   7
+there are      149  channel couplings to be solved
+xsec=            7.98169
+
+For alpha_xA=   8
+there are      164  channel couplings to be solved
+xsec=            2.33438
+
+For alpha_xA=   9
+there are      178  channel couplings to be solved
+xsec=            0.94679
+
+For alpha_xA=  10
+there are      190  channel couplings to be solved
+xsec=            0.45042
+
+For alpha_xA=  11
+there are      201  channel couplings to be solved
+xsec=            0.22744
+
+For alpha_xA=  12
+there are      210  channel couplings to be solved
+xsec=            0.11693
+
+For alpha_xA=  13
+there are      218  channel couplings to be solved
+xsec=            0.06199
+
+                    (CPU  time =        2.31  seconds)
+--------------------------------------------------------
+alpha_xA =   1     X-sec =    0.3705
+alpha_xA =   2     X-sec =    1.1869
+alpha_xA =   3     X-sec =    2.0319
+alpha_xA =   4     X-sec =    2.8675
+alpha_xA =   5     X-sec =    4.9694
+alpha_xA =   6     X-sec =    4.2392
+alpha_xA =   7     X-sec =    7.9817
+alpha_xA =   8     X-sec =    2.3344
+alpha_xA =   9     X-sec =    0.9468
+alpha_xA =  10     X-sec =    0.4504
+alpha_xA =  11     X-sec =    0.2274
+alpha_xA =  12     X-sec =    0.1169
+alpha_xA =  13     X-sec =    0.0620
+The double differential cross sections
+
+theta =   0.00     X-sec =    8.9341
+theta =   1.00     X-sec =    8.9610
+theta =   2.00     X-sec =    9.0406
+theta =   3.00     X-sec =    9.1692
+theta =   4.00     X-sec =    9.3413
+theta =   5.00     X-sec =    9.5489
+theta =   6.00     X-sec =    9.7826
+theta =   7.00     X-sec =   10.0321
+theta =   8.00     X-sec =   10.2868
+theta =   9.00     X-sec =   10.5372
+theta =  10.00     X-sec =   10.7751
+theta =  11.00     X-sec =   10.9949
+theta =  12.00     X-sec =   11.1933
+theta =  13.00     X-sec =   11.3695
+theta =  14.00     X-sec =   11.5242
+theta =  15.00     X-sec =   11.6589
+theta =  16.00     X-sec =   11.7755
+theta =  17.00     X-sec =   11.8752
+theta =  18.00     X-sec =   11.9585
+theta =  19.00     X-sec =   12.0245
+theta =  20.00     X-sec =   12.0717
+theta =  21.00     X-sec =   12.0975
+theta =  22.00     X-sec =   12.0991
+theta =  23.00     X-sec =   12.0731
+theta =  24.00     X-sec =   12.0162
+theta =  25.00     X-sec =   11.9254
+theta =  26.00     X-sec =   11.7977
+theta =  27.00     X-sec =   11.6311
+theta =  28.00     X-sec =   11.4245
+theta =  29.00     X-sec =   11.1778
+theta =  30.00     X-sec =   10.8927
+theta =  31.00     X-sec =   10.5722
+theta =  32.00     X-sec =   10.2208
+theta =  33.00     X-sec =    9.8439
+theta =  34.00     X-sec =    9.4479
+theta =  35.00     X-sec =    9.0390
+theta =  36.00     X-sec =    8.6233
+theta =  37.00     X-sec =    8.2062
+theta =  38.00     X-sec =    7.7921
+theta =  39.00     X-sec =    7.3841
+theta =  40.00     X-sec =    6.9847
+theta =  41.00     X-sec =    6.5952
+theta =  42.00     X-sec =    6.2164
+theta =  43.00     X-sec =    5.8488
+theta =  44.00     X-sec =    5.4927
+theta =  45.00     X-sec =    5.1486
+theta =  46.00     X-sec =    4.8171
+theta =  47.00     X-sec =    4.4990
+theta =  48.00     X-sec =    4.1954
+theta =  49.00     X-sec =    3.9071
+theta =  50.00     X-sec =    3.6353
+theta =  51.00     X-sec =    3.3807
+theta =  52.00     X-sec =    3.1440
+theta =  53.00     X-sec =    2.9256
+theta =  54.00     X-sec =    2.7255
+theta =  55.00     X-sec =    2.5436
+theta =  56.00     X-sec =    2.3794
+theta =  57.00     X-sec =    2.2324
+theta =  58.00     X-sec =    2.1017
+theta =  59.00     X-sec =    1.9864
+theta =  60.00     X-sec =    1.8854
+theta =  61.00     X-sec =    1.7977
+theta =  62.00     X-sec =    1.7219
+theta =  63.00     X-sec =    1.6568
+theta =  64.00     X-sec =    1.6011
+theta =  65.00     X-sec =    1.5534
+theta =  66.00     X-sec =    1.5126
+theta =  67.00     X-sec =    1.4773
+theta =  68.00     X-sec =    1.4465
+theta =  69.00     X-sec =    1.4189
+theta =  70.00     X-sec =    1.3938
+theta =  71.00     X-sec =    1.3704
+theta =  72.00     X-sec =    1.3480
+theta =  73.00     X-sec =    1.3261
+theta =  74.00     X-sec =    1.3043
+theta =  75.00     X-sec =    1.2824
+theta =  76.00     X-sec =    1.2601
+theta =  77.00     X-sec =    1.2373
+theta =  78.00     X-sec =    1.2139
+theta =  79.00     X-sec =    1.1898
+theta =  80.00     X-sec =    1.1650
+theta =  81.00     X-sec =    1.1393
+theta =  82.00     X-sec =    1.1126
+theta =  83.00     X-sec =    1.0850
+theta =  84.00     X-sec =    1.0564
+theta =  85.00     X-sec =    1.0267
+theta =  86.00     X-sec =    0.9959
+theta =  87.00     X-sec =    0.9643
+theta =  88.00     X-sec =    0.9318
+theta =  89.00     X-sec =    0.8986
+theta =  90.00     X-sec =    0.8649
+theta =  91.00     X-sec =    0.8308
+theta =  92.00     X-sec =    0.7965
+theta =  93.00     X-sec =    0.7623
+theta =  94.00     X-sec =    0.7282
+theta =  95.00     X-sec =    0.6946
+theta =  96.00     X-sec =    0.6615
+theta =  97.00     X-sec =    0.6291
+theta =  98.00     X-sec =    0.5976
+theta =  99.00     X-sec =    0.5671
+theta = 100.00     X-sec =    0.5377
+theta = 101.00     X-sec =    0.5095
+theta = 102.00     X-sec =    0.4827
+theta = 103.00     X-sec =    0.4573
+theta = 104.00     X-sec =    0.4334
+theta = 105.00     X-sec =    0.4110
+theta = 106.00     X-sec =    0.3902
+theta = 107.00     X-sec =    0.3708
+theta = 108.00     X-sec =    0.3529
+theta = 109.00     X-sec =    0.3365
+theta = 110.00     X-sec =    0.3213
+theta = 111.00     X-sec =    0.3076
+theta = 112.00     X-sec =    0.2951
+theta = 113.00     X-sec =    0.2838
+theta = 114.00     X-sec =    0.2738
+theta = 115.00     X-sec =    0.2650
+theta = 116.00     X-sec =    0.2573
+theta = 117.00     X-sec =    0.2508
+theta = 118.00     X-sec =    0.2453
+theta = 119.00     X-sec =    0.2407
+theta = 120.00     X-sec =    0.2371
+theta = 121.00     X-sec =    0.2343
+theta = 122.00     X-sec =    0.2322
+theta = 123.00     X-sec =    0.2307
+theta = 124.00     X-sec =    0.2297
+theta = 125.00     X-sec =    0.2291
+theta = 126.00     X-sec =    0.2287
+theta = 127.00     X-sec =    0.2285
+theta = 128.00     X-sec =    0.2284
+theta = 129.00     X-sec =    0.2282
+theta = 130.00     X-sec =    0.2280
+theta = 131.00     X-sec =    0.2276
+theta = 132.00     X-sec =    0.2271
+theta = 133.00     X-sec =    0.2264
+theta = 134.00     X-sec =    0.2255
+theta = 135.00     X-sec =    0.2245
+theta = 136.00     X-sec =    0.2234
+theta = 137.00     X-sec =    0.2222
+theta = 138.00     X-sec =    0.2210
+theta = 139.00     X-sec =    0.2198
+theta = 140.00     X-sec =    0.2186
+theta = 141.00     X-sec =    0.2175
+theta = 142.00     X-sec =    0.2163
+theta = 143.00     X-sec =    0.2150
+theta = 144.00     X-sec =    0.2136
+theta = 145.00     X-sec =    0.2120
+theta = 146.00     X-sec =    0.2102
+theta = 147.00     X-sec =    0.2081
+theta = 148.00     X-sec =    0.2058
+theta = 149.00     X-sec =    0.2032
+theta = 150.00     X-sec =    0.2004
+theta = 151.00     X-sec =    0.1975
+theta = 152.00     X-sec =    0.1944
+theta = 153.00     X-sec =    0.1914
+theta = 154.00     X-sec =    0.1883
+theta = 155.00     X-sec =    0.1852
+theta = 156.00     X-sec =    0.1822
+theta = 157.00     X-sec =    0.1792
+theta = 158.00     X-sec =    0.1763
+theta = 159.00     X-sec =    0.1734
+theta = 160.00     X-sec =    0.1707
+theta = 161.00     X-sec =    0.1680
+theta = 162.00     X-sec =    0.1653
+theta = 163.00     X-sec =    0.1628
+theta = 164.00     X-sec =    0.1604
+theta = 165.00     X-sec =    0.1581
+theta = 166.00     X-sec =    0.1560
+theta = 167.00     X-sec =    0.1540
+theta = 168.00     X-sec =    0.1522
+theta = 169.00     X-sec =    0.1505
+theta = 170.00     X-sec =    0.1488
+theta = 171.00     X-sec =    0.1472
+theta = 172.00     X-sec =    0.1457
+theta = 173.00     X-sec =    0.1442
+theta = 174.00     X-sec =    0.1427
+theta = 175.00     X-sec =    0.1413
+theta = 176.00     X-sec =    0.1401
+theta = 177.00     X-sec =    0.1390
+theta = 178.00     X-sec =    0.1382
+theta = 179.00     X-sec =    0.1377
+theta = 180.00     X-sec =    0.1376
+Now calculating the x-sec at Eb= 12.000
+Using finite range DWBA in IVA-prior form
+calculating cross section alpha_xA dependence 
+
+For alpha_xA=   1
+there are       26  channel couplings to be solved
+xsec=            0.46777
+
+For alpha_xA=   2
+there are       50  channel couplings to be solved
+xsec=            1.54212
+
+For alpha_xA=   3
+there are       73  channel couplings to be solved
+xsec=            2.62442
+
+For alpha_xA=   4
+there are       94  channel couplings to be solved
+xsec=            3.85308
+
+For alpha_xA=   5
+there are      114  channel couplings to be solved
+xsec=            6.83295
+
+For alpha_xA=   6
+there are      132  channel couplings to be solved
+xsec=            5.62921
+
+For alpha_xA=   7
+there are      149  channel couplings to be solved
+xsec=            9.35583
+
+For alpha_xA=   8
+there are      164  channel couplings to be solved
+xsec=            2.43820
+
+For alpha_xA=   9
+there are      178  channel couplings to be solved
+xsec=            0.96006
+
+For alpha_xA=  10
+there are      190  channel couplings to be solved
+xsec=            0.43819
+
+For alpha_xA=  11
+there are      201  channel couplings to be solved
+xsec=            0.21390
+
+For alpha_xA=  12
+there are      210  channel couplings to be solved
+xsec=            0.10824
+
+For alpha_xA=  13
+there are      218  channel couplings to be solved
+xsec=            0.05749
+
+                    (CPU  time =        2.26  seconds)
+--------------------------------------------------------
+alpha_xA =   1     X-sec =    0.4678
+alpha_xA =   2     X-sec =    1.5421
+alpha_xA =   3     X-sec =    2.6244
+alpha_xA =   4     X-sec =    3.8531
+alpha_xA =   5     X-sec =    6.8329
+alpha_xA =   6     X-sec =    5.6292
+alpha_xA =   7     X-sec =    9.3558
+alpha_xA =   8     X-sec =    2.4382
+alpha_xA =   9     X-sec =    0.9601
+alpha_xA =  10     X-sec =    0.4382
+alpha_xA =  11     X-sec =    0.2139
+alpha_xA =  12     X-sec =    0.1082
+alpha_xA =  13     X-sec =    0.0575
+The double differential cross sections
+
+theta =   0.00     X-sec =   15.4029
+theta =   1.00     X-sec =   15.4295
+theta =   2.00     X-sec =   15.5078
+theta =   3.00     X-sec =   15.6323
+theta =   4.00     X-sec =   15.7943
+theta =   5.00     X-sec =   15.9822
+theta =   6.00     X-sec =   16.1820
+theta =   7.00     X-sec =   16.3787
+theta =   8.00     X-sec =   16.5574
+theta =   9.00     X-sec =   16.7056
+theta =  10.00     X-sec =   16.8140
+theta =  11.00     X-sec =   16.8776
+theta =  12.00     X-sec =   16.8965
+theta =  13.00     X-sec =   16.8750
+theta =  14.00     X-sec =   16.8205
+theta =  15.00     X-sec =   16.7418
+theta =  16.00     X-sec =   16.6479
+theta =  17.00     X-sec =   16.5458
+theta =  18.00     X-sec =   16.4401
+theta =  19.00     X-sec =   16.3322
+theta =  20.00     X-sec =   16.2207
+theta =  21.00     X-sec =   16.1018
+theta =  22.00     X-sec =   15.9700
+theta =  23.00     X-sec =   15.8191
+theta =  24.00     X-sec =   15.6426
+theta =  25.00     X-sec =   15.4347
+theta =  26.00     X-sec =   15.1903
+theta =  27.00     X-sec =   14.9057
+theta =  28.00     X-sec =   14.5787
+theta =  29.00     X-sec =   14.2090
+theta =  30.00     X-sec =   13.7981
+theta =  31.00     X-sec =   13.3492
+theta =  32.00     X-sec =   12.8674
+theta =  33.00     X-sec =   12.3586
+theta =  34.00     X-sec =   11.8297
+theta =  35.00     X-sec =   11.2877
+theta =  36.00     X-sec =   10.7394
+theta =  37.00     X-sec =   10.1905
+theta =  38.00     X-sec =    9.6459
+theta =  39.00     X-sec =    9.1095
+theta =  40.00     X-sec =    8.5839
+theta =  41.00     X-sec =    8.0711
+theta =  42.00     X-sec =    7.5725
+theta =  43.00     X-sec =    7.0892
+theta =  44.00     X-sec =    6.6223
+theta =  45.00     X-sec =    6.1729
+theta =  46.00     X-sec =    5.7425
+theta =  47.00     X-sec =    5.3325
+theta =  48.00     X-sec =    4.9443
+theta =  49.00     X-sec =    4.5792
+theta =  50.00     X-sec =    4.2382
+theta =  51.00     X-sec =    3.9221
+theta =  52.00     X-sec =    3.6312
+theta =  53.00     X-sec =    3.3653
+theta =  54.00     X-sec =    3.1240
+theta =  55.00     X-sec =    2.9065
+theta =  56.00     X-sec =    2.7119
+theta =  57.00     X-sec =    2.5390
+theta =  58.00     X-sec =    2.3866
+theta =  59.00     X-sec =    2.2534
+theta =  60.00     X-sec =    2.1378
+theta =  61.00     X-sec =    2.0384
+theta =  62.00     X-sec =    1.9535
+theta =  63.00     X-sec =    1.8815
+theta =  64.00     X-sec =    1.8204
+theta =  65.00     X-sec =    1.7686
+theta =  66.00     X-sec =    1.7244
+theta =  67.00     X-sec =    1.6860
+theta =  68.00     X-sec =    1.6520
+theta =  69.00     X-sec =    1.6211
+theta =  70.00     X-sec =    1.5922
+theta =  71.00     X-sec =    1.5646
+theta =  72.00     X-sec =    1.5375
+theta =  73.00     X-sec =    1.5105
+theta =  74.00     X-sec =    1.4833
+theta =  75.00     X-sec =    1.4556
+theta =  76.00     X-sec =    1.4272
+theta =  77.00     X-sec =    1.3979
+theta =  78.00     X-sec =    1.3677
+theta =  79.00     X-sec =    1.3364
+theta =  80.00     X-sec =    1.3039
+theta =  81.00     X-sec =    1.2701
+theta =  82.00     X-sec =    1.2349
+theta =  83.00     X-sec =    1.1985
+theta =  84.00     X-sec =    1.1609
+theta =  85.00     X-sec =    1.1222
+theta =  86.00     X-sec =    1.0825
+theta =  87.00     X-sec =    1.0420
+theta =  88.00     X-sec =    1.0009
+theta =  89.00     X-sec =    0.9595
+theta =  90.00     X-sec =    0.9178
+theta =  91.00     X-sec =    0.8761
+theta =  92.00     X-sec =    0.8347
+theta =  93.00     X-sec =    0.7937
+theta =  94.00     X-sec =    0.7534
+theta =  95.00     X-sec =    0.7140
+theta =  96.00     X-sec =    0.6757
+theta =  97.00     X-sec =    0.6387
+theta =  98.00     X-sec =    0.6032
+theta =  99.00     X-sec =    0.5694
+theta = 100.00     X-sec =    0.5374
+theta = 101.00     X-sec =    0.5072
+theta = 102.00     X-sec =    0.4791
+theta = 103.00     X-sec =    0.4530
+theta = 104.00     X-sec =    0.4288
+theta = 105.00     X-sec =    0.4067
+theta = 106.00     X-sec =    0.3864
+theta = 107.00     X-sec =    0.3681
+theta = 108.00     X-sec =    0.3516
+theta = 109.00     X-sec =    0.3369
+theta = 110.00     X-sec =    0.3239
+theta = 111.00     X-sec =    0.3126
+theta = 112.00     X-sec =    0.3028
+theta = 113.00     X-sec =    0.2944
+theta = 114.00     X-sec =    0.2873
+theta = 115.00     X-sec =    0.2815
+theta = 116.00     X-sec =    0.2767
+theta = 117.00     X-sec =    0.2730
+theta = 118.00     X-sec =    0.2701
+theta = 119.00     X-sec =    0.2679
+theta = 120.00     X-sec =    0.2664
+theta = 121.00     X-sec =    0.2654
+theta = 122.00     X-sec =    0.2649
+theta = 123.00     X-sec =    0.2647
+theta = 124.00     X-sec =    0.2647
+theta = 125.00     X-sec =    0.2647
+theta = 126.00     X-sec =    0.2648
+theta = 127.00     X-sec =    0.2648
+theta = 128.00     X-sec =    0.2646
+theta = 129.00     X-sec =    0.2641
+theta = 130.00     X-sec =    0.2634
+theta = 131.00     X-sec =    0.2624
+theta = 132.00     X-sec =    0.2610
+theta = 133.00     X-sec =    0.2594
+theta = 134.00     X-sec =    0.2576
+theta = 135.00     X-sec =    0.2555
+theta = 136.00     X-sec =    0.2532
+theta = 137.00     X-sec =    0.2508
+theta = 138.00     X-sec =    0.2481
+theta = 139.00     X-sec =    0.2451
+theta = 140.00     X-sec =    0.2417
+theta = 141.00     X-sec =    0.2380
+theta = 142.00     X-sec =    0.2338
+theta = 143.00     X-sec =    0.2292
+theta = 144.00     X-sec =    0.2241
+theta = 145.00     X-sec =    0.2186
+theta = 146.00     X-sec =    0.2127
+theta = 147.00     X-sec =    0.2066
+theta = 148.00     X-sec =    0.2004
+theta = 149.00     X-sec =    0.1941
+theta = 150.00     X-sec =    0.1879
+theta = 151.00     X-sec =    0.1818
+theta = 152.00     X-sec =    0.1759
+theta = 153.00     X-sec =    0.1702
+theta = 154.00     X-sec =    0.1648
+theta = 155.00     X-sec =    0.1595
+theta = 156.00     X-sec =    0.1545
+theta = 157.00     X-sec =    0.1497
+theta = 158.00     X-sec =    0.1451
+theta = 159.00     X-sec =    0.1408
+theta = 160.00     X-sec =    0.1367
+theta = 161.00     X-sec =    0.1330
+theta = 162.00     X-sec =    0.1295
+theta = 163.00     X-sec =    0.1264
+theta = 164.00     X-sec =    0.1235
+theta = 165.00     X-sec =    0.1210
+theta = 166.00     X-sec =    0.1187
+theta = 167.00     X-sec =    0.1165
+theta = 168.00     X-sec =    0.1145
+theta = 169.00     X-sec =    0.1126
+theta = 170.00     X-sec =    0.1107
+theta = 171.00     X-sec =    0.1088
+theta = 172.00     X-sec =    0.1070
+theta = 173.00     X-sec =    0.1052
+theta = 174.00     X-sec =    0.1035
+theta = 175.00     X-sec =    0.1019
+theta = 176.00     X-sec =    0.1006
+theta = 177.00     X-sec =    0.0995
+theta = 178.00     X-sec =    0.0986
+theta = 179.00     X-sec =    0.0981
+theta = 180.00     X-sec =    0.0979
+Now calculating the x-sec at Eb= 13.000
+Using finite range DWBA in IVA-prior form
+calculating cross section alpha_xA dependence 
+
+For alpha_xA=   1
+there are       26  channel couplings to be solved
+xsec=            0.54372
+
+For alpha_xA=   2
+there are       50  channel couplings to be solved
+xsec=            1.84813
+
+For alpha_xA=   3
+there are       73  channel couplings to be solved
+xsec=            3.10919
+
+For alpha_xA=   4
+there are       94  channel couplings to be solved
+xsec=            4.78043
+
+For alpha_xA=   5
+there are      114  channel couplings to be solved
+xsec=            8.53597
+
+For alpha_xA=   6
+there are      132  channel couplings to be solved
+xsec=            6.82463
+
+For alpha_xA=   7
+there are      149  channel couplings to be solved
+xsec=            9.29869
+
+For alpha_xA=   8
+there are      164  channel couplings to be solved
+xsec=            2.32209
+
+For alpha_xA=   9
+there are      178  channel couplings to be solved
+xsec=            0.90209
+
+For alpha_xA=  10
+there are      190  channel couplings to be solved
+xsec=            0.40203
+
+For alpha_xA=  11
+there are      201  channel couplings to be solved
+xsec=            0.19307
+
+For alpha_xA=  12
+there are      210  channel couplings to be solved
+xsec=            0.09777
+
+For alpha_xA=  13
+there are      218  channel couplings to be solved
+xsec=            0.05265
+
+                    (CPU  time =        2.27  seconds)
+--------------------------------------------------------
+alpha_xA =   1     X-sec =    0.5437
+alpha_xA =   2     X-sec =    1.8481
+alpha_xA =   3     X-sec =    3.1092
+alpha_xA =   4     X-sec =    4.7804
+alpha_xA =   5     X-sec =    8.5360
+alpha_xA =   6     X-sec =    6.8246
+alpha_xA =   7     X-sec =    9.2987
+alpha_xA =   8     X-sec =    2.3221
+alpha_xA =   9     X-sec =    0.9021
+alpha_xA =  10     X-sec =    0.4020
+alpha_xA =  11     X-sec =    0.1931
+alpha_xA =  12     X-sec =    0.0978
+alpha_xA =  13     X-sec =    0.0526
+The double differential cross sections
+
+theta =   0.00     X-sec =   22.8082
+theta =   1.00     X-sec =   22.8215
+theta =   2.00     X-sec =   22.8592
+theta =   3.00     X-sec =   22.9154
+theta =   4.00     X-sec =   22.9804
+theta =   5.00     X-sec =   23.0413
+theta =   6.00     X-sec =   23.0831
+theta =   7.00     X-sec =   23.0902
+theta =   8.00     X-sec =   23.0480
+theta =   9.00     X-sec =   22.9455
+theta =  10.00     X-sec =   22.7763
+theta =  11.00     X-sec =   22.5404
+theta =  12.00     X-sec =   22.2440
+theta =  13.00     X-sec =   21.8985
+theta =  14.00     X-sec =   21.5194
+theta =  15.00     X-sec =   21.1233
+theta =  16.00     X-sec =   20.7260
+theta =  17.00     X-sec =   20.3404
+theta =  18.00     X-sec =   19.9746
+theta =  19.00     X-sec =   19.6322
+theta =  20.00     X-sec =   19.3117
+theta =  21.00     X-sec =   19.0074
+theta =  22.00     X-sec =   18.7111
+theta =  23.00     X-sec =   18.4129
+theta =  24.00     X-sec =   18.1026
+theta =  25.00     X-sec =   17.7708
+theta =  26.00     X-sec =   17.4096
+theta =  27.00     X-sec =   17.0132
+theta =  28.00     X-sec =   16.5781
+theta =  29.00     X-sec =   16.1031
+theta =  30.00     X-sec =   15.5895
+theta =  31.00     X-sec =   15.0404
+theta =  32.00     X-sec =   14.4606
+theta =  33.00     X-sec =   13.8563
+theta =  34.00     X-sec =   13.2338
+theta =  35.00     X-sec =   12.5998
+theta =  36.00     X-sec =   11.9608
+theta =  37.00     X-sec =   11.3223
+theta =  38.00     X-sec =   10.6893
+theta =  39.00     X-sec =   10.0657
+theta =  40.00     X-sec =    9.4549
+theta =  41.00     X-sec =    8.8594
+theta =  42.00     X-sec =    8.2815
+theta =  43.00     X-sec =    7.7232
+theta =  44.00     X-sec =    7.1863
+theta =  45.00     X-sec =    6.6726
+theta =  46.00     X-sec =    6.1837
+theta =  47.00     X-sec =    5.7213
+theta =  48.00     X-sec =    5.2865
+theta =  49.00     X-sec =    4.8805
+theta =  50.00     X-sec =    4.5039
+theta =  51.00     X-sec =    4.1570
+theta =  52.00     X-sec =    3.8395
+theta =  53.00     X-sec =    3.5509
+theta =  54.00     X-sec =    3.2904
+theta =  55.00     X-sec =    3.0569
+theta =  56.00     X-sec =    2.8491
+theta =  57.00     X-sec =    2.6656
+theta =  58.00     X-sec =    2.5047
+theta =  59.00     X-sec =    2.3649
+theta =  60.00     X-sec =    2.2444
+theta =  61.00     X-sec =    2.1413
+theta =  62.00     X-sec =    2.0536
+theta =  63.00     X-sec =    1.9793
+theta =  64.00     X-sec =    1.9164
+theta =  65.00     X-sec =    1.8629
+theta =  66.00     X-sec =    1.8166
+theta =  67.00     X-sec =    1.7760
+theta =  68.00     X-sec =    1.7394
+theta =  69.00     X-sec =    1.7055
+theta =  70.00     X-sec =    1.6731
+theta =  71.00     X-sec =    1.6414
+theta =  72.00     X-sec =    1.6099
+theta =  73.00     X-sec =    1.5782
+theta =  74.00     X-sec =    1.5458
+theta =  75.00     X-sec =    1.5126
+theta =  76.00     X-sec =    1.4785
+theta =  77.00     X-sec =    1.4434
+theta =  78.00     X-sec =    1.4071
+theta =  79.00     X-sec =    1.3696
+theta =  80.00     X-sec =    1.3308
+theta =  81.00     X-sec =    1.2908
+theta =  82.00     X-sec =    1.2496
+theta =  83.00     X-sec =    1.2072
+theta =  84.00     X-sec =    1.1638
+theta =  85.00     X-sec =    1.1196
+theta =  86.00     X-sec =    1.0747
+theta =  87.00     X-sec =    1.0293
+theta =  88.00     X-sec =    0.9838
+theta =  89.00     X-sec =    0.9383
+theta =  90.00     X-sec =    0.8930
+theta =  91.00     X-sec =    0.8482
+theta =  92.00     X-sec =    0.8040
+theta =  93.00     X-sec =    0.7607
+theta =  94.00     X-sec =    0.7186
+theta =  95.00     X-sec =    0.6777
+theta =  96.00     X-sec =    0.6385
+theta =  97.00     X-sec =    0.6011
+theta =  98.00     X-sec =    0.5657
+theta =  99.00     X-sec =    0.5326
+theta = 100.00     X-sec =    0.5019
+theta = 101.00     X-sec =    0.4736
+theta = 102.00     X-sec =    0.4478
+theta = 103.00     X-sec =    0.4245
+theta = 104.00     X-sec =    0.4035
+theta = 105.00     X-sec =    0.3848
+theta = 106.00     X-sec =    0.3682
+theta = 107.00     X-sec =    0.3536
+theta = 108.00     X-sec =    0.3408
+theta = 109.00     X-sec =    0.3296
+theta = 110.00     X-sec =    0.3200
+theta = 111.00     X-sec =    0.3119
+theta = 112.00     X-sec =    0.3051
+theta = 113.00     X-sec =    0.2995
+theta = 114.00     X-sec =    0.2950
+theta = 115.00     X-sec =    0.2915
+theta = 116.00     X-sec =    0.2890
+theta = 117.00     X-sec =    0.2872
+theta = 118.00     X-sec =    0.2860
+theta = 119.00     X-sec =    0.2855
+theta = 120.00     X-sec =    0.2853
+theta = 121.00     X-sec =    0.2855
+theta = 122.00     X-sec =    0.2858
+theta = 123.00     X-sec =    0.2863
+theta = 124.00     X-sec =    0.2869
+theta = 125.00     X-sec =    0.2873
+theta = 126.00     X-sec =    0.2875
+theta = 127.00     X-sec =    0.2874
+theta = 128.00     X-sec =    0.2869
+theta = 129.00     X-sec =    0.2859
+theta = 130.00     X-sec =    0.2842
+theta = 131.00     X-sec =    0.2819
+theta = 132.00     X-sec =    0.2789
+theta = 133.00     X-sec =    0.2753
+theta = 134.00     X-sec =    0.2709
+theta = 135.00     X-sec =    0.2660
+theta = 136.00     X-sec =    0.2606
+theta = 137.00     X-sec =    0.2548
+theta = 138.00     X-sec =    0.2487
+theta = 139.00     X-sec =    0.2423
+theta = 140.00     X-sec =    0.2359
+theta = 141.00     X-sec =    0.2293
+theta = 142.00     X-sec =    0.2227
+theta = 143.00     X-sec =    0.2161
+theta = 144.00     X-sec =    0.2095
+theta = 145.00     X-sec =    0.2028
+theta = 146.00     X-sec =    0.1962
+theta = 147.00     X-sec =    0.1895
+theta = 148.00     X-sec =    0.1829
+theta = 149.00     X-sec =    0.1763
+theta = 150.00     X-sec =    0.1697
+theta = 151.00     X-sec =    0.1632
+theta = 152.00     X-sec =    0.1569
+theta = 153.00     X-sec =    0.1507
+theta = 154.00     X-sec =    0.1448
+theta = 155.00     X-sec =    0.1391
+theta = 156.00     X-sec =    0.1337
+theta = 157.00     X-sec =    0.1286
+theta = 158.00     X-sec =    0.1239
+theta = 159.00     X-sec =    0.1196
+theta = 160.00     X-sec =    0.1158
+theta = 161.00     X-sec =    0.1123
+theta = 162.00     X-sec =    0.1092
+theta = 163.00     X-sec =    0.1065
+theta = 164.00     X-sec =    0.1041
+theta = 165.00     X-sec =    0.1020
+theta = 166.00     X-sec =    0.1002
+theta = 167.00     X-sec =    0.0986
+theta = 168.00     X-sec =    0.0973
+theta = 169.00     X-sec =    0.0961
+theta = 170.00     X-sec =    0.0951
+theta = 171.00     X-sec =    0.0942
+theta = 172.00     X-sec =    0.0934
+theta = 173.00     X-sec =    0.0927
+theta = 174.00     X-sec =    0.0922
+theta = 175.00     X-sec =    0.0917
+theta = 176.00     X-sec =    0.0914
+theta = 177.00     X-sec =    0.0911
+theta = 178.00     X-sec =    0.0910
+theta = 179.00     X-sec =    0.0909
+theta = 180.00     X-sec =    0.0908
+Now calculating the x-sec at Eb= 14.000
+Using finite range DWBA in IVA-prior form
+calculating cross section alpha_xA dependence 
+
+For alpha_xA=   1
+there are       26  channel couplings to be solved
+xsec=            0.58692
+
+For alpha_xA=   2
+there are       50  channel couplings to be solved
+xsec=            2.06754
+
+For alpha_xA=   3
+there are       73  channel couplings to be solved
+xsec=            3.41349
+
+For alpha_xA=   4
+there are       94  channel couplings to be solved
+xsec=            5.55532
+
+For alpha_xA=   5
+there are      114  channel couplings to be solved
+xsec=            9.80109
+
+For alpha_xA=   6
+there are      132  channel couplings to be solved
+xsec=            7.66842
+
+For alpha_xA=   7
+there are      149  channel couplings to be solved
+xsec=            8.13283
+
+For alpha_xA=   8
+there are      164  channel couplings to be solved
+xsec=            2.05893
+
+For alpha_xA=   9
+there are      178  channel couplings to be solved
+xsec=            0.79877
+
+For alpha_xA=  10
+there are      190  channel couplings to be solved
+xsec=            0.35368
+
+For alpha_xA=  11
+there are      201  channel couplings to be solved
+xsec=            0.16970
+
+For alpha_xA=  12
+there are      210  channel couplings to be solved
+xsec=            0.08724
+
+For alpha_xA=  13
+there are      218  channel couplings to be solved
+xsec=            0.04802
+
+                    (CPU  time =        2.30  seconds)
+--------------------------------------------------------
+alpha_xA =   1     X-sec =    0.5869
+alpha_xA =   2     X-sec =    2.0675
+alpha_xA =   3     X-sec =    3.4135
+alpha_xA =   4     X-sec =    5.5553
+alpha_xA =   5     X-sec =    9.8011
+alpha_xA =   6     X-sec =    7.6684
+alpha_xA =   7     X-sec =    8.1328
+alpha_xA =   8     X-sec =    2.0589
+alpha_xA =   9     X-sec =    0.7988
+alpha_xA =  10     X-sec =    0.3537
+alpha_xA =  11     X-sec =    0.1697
+alpha_xA =  12     X-sec =    0.0872
+alpha_xA =  13     X-sec =    0.0480
+The double differential cross sections
+
+theta =   0.00     X-sec =   29.9251
+theta =   1.00     X-sec =   29.9153
+theta =   2.00     X-sec =   29.8840
+theta =   3.00     X-sec =   29.8259
+theta =   4.00     X-sec =   29.7323
+theta =   5.00     X-sec =   29.5921
+theta =   6.00     X-sec =   29.3929
+theta =   7.00     X-sec =   29.1225
+theta =   8.00     X-sec =   28.7712
+theta =   9.00     X-sec =   28.3335
+theta =  10.00     X-sec =   27.8096
+theta =  11.00     X-sec =   27.2066
+theta =  12.00     X-sec =   26.5382
+theta =  13.00     X-sec =   25.8232
+theta =  14.00     X-sec =   25.0836
+theta =  15.00     X-sec =   24.3422
+theta =  16.00     X-sec =   23.6194
+theta =  17.00     X-sec =   22.9315
+theta =  18.00     X-sec =   22.2889
+theta =  19.00     X-sec =   21.6956
+theta =  20.00     X-sec =   21.1498
+theta =  21.00     X-sec =   20.6445
+theta =  22.00     X-sec =   20.1696
+theta =  23.00     X-sec =   19.7129
+theta =  24.00     X-sec =   19.2618
+theta =  25.00     X-sec =   18.8047
+theta =  26.00     X-sec =   18.3317
+theta =  27.00     X-sec =   17.8353
+theta =  28.00     X-sec =   17.3106
+theta =  29.00     X-sec =   16.7552
+theta =  30.00     X-sec =   16.1693
+theta =  31.00     X-sec =   15.5550
+theta =  32.00     X-sec =   14.9161
+theta =  33.00     X-sec =   14.2577
+theta =  34.00     X-sec =   13.5854
+theta =  35.00     X-sec =   12.9050
+theta =  36.00     X-sec =   12.2224
+theta =  37.00     X-sec =   11.5429
+theta =  38.00     X-sec =   10.8712
+theta =  39.00     X-sec =   10.2115
+theta =  40.00     X-sec =    9.5674
+theta =  41.00     X-sec =    8.9420
+theta =  42.00     X-sec =    8.3377
+theta =  43.00     X-sec =    7.7568
+theta =  44.00     X-sec =    7.2013
+theta =  45.00     X-sec =    6.6727
+theta =  46.00     X-sec =    6.1725
+theta =  47.00     X-sec =    5.7018
+theta =  48.00     X-sec =    5.2613
+theta =  49.00     X-sec =    4.8516
+theta =  50.00     X-sec =    4.4729
+theta =  51.00     X-sec =    4.1249
+theta =  52.00     X-sec =    3.8071
+theta =  53.00     X-sec =    3.5189
+theta =  54.00     X-sec =    3.2592
+theta =  55.00     X-sec =    3.0268
+theta =  56.00     X-sec =    2.8205
+theta =  57.00     X-sec =    2.6388
+theta =  58.00     X-sec =    2.4799
+theta =  59.00     X-sec =    2.3422
+theta =  60.00     X-sec =    2.2237
+theta =  61.00     X-sec =    2.1224
+theta =  62.00     X-sec =    2.0361
+theta =  63.00     X-sec =    1.9628
+theta =  64.00     X-sec =    1.9001
+theta =  65.00     X-sec =    1.8461
+theta =  66.00     X-sec =    1.7989
+theta =  67.00     X-sec =    1.7566
+theta =  68.00     X-sec =    1.7177
+theta =  69.00     X-sec =    1.6811
+theta =  70.00     X-sec =    1.6458
+theta =  71.00     X-sec =    1.6109
+theta =  72.00     X-sec =    1.5760
+theta =  73.00     X-sec =    1.5406
+theta =  74.00     X-sec =    1.5045
+theta =  75.00     X-sec =    1.4675
+theta =  76.00     X-sec =    1.4295
+theta =  77.00     X-sec =    1.3905
+theta =  78.00     X-sec =    1.3504
+theta =  79.00     X-sec =    1.3092
+theta =  80.00     X-sec =    1.2670
+theta =  81.00     X-sec =    1.2239
+theta =  82.00     X-sec =    1.1799
+theta =  83.00     X-sec =    1.1353
+theta =  84.00     X-sec =    1.0900
+theta =  85.00     X-sec =    1.0444
+theta =  86.00     X-sec =    0.9986
+theta =  87.00     X-sec =    0.9527
+theta =  88.00     X-sec =    0.9069
+theta =  89.00     X-sec =    0.8615
+theta =  90.00     X-sec =    0.8166
+theta =  91.00     X-sec =    0.7725
+theta =  92.00     X-sec =    0.7293
+theta =  93.00     X-sec =    0.6875
+theta =  94.00     X-sec =    0.6472
+theta =  95.00     X-sec =    0.6087
+theta =  96.00     X-sec =    0.5722
+theta =  97.00     X-sec =    0.5381
+theta =  98.00     X-sec =    0.5064
+theta =  99.00     X-sec =    0.4772
+theta = 100.00     X-sec =    0.4507
+theta = 101.00     X-sec =    0.4267
+theta = 102.00     X-sec =    0.4053
+theta = 103.00     X-sec =    0.3862
+theta = 104.00     X-sec =    0.3694
+theta = 105.00     X-sec =    0.3547
+theta = 106.00     X-sec =    0.3419
+theta = 107.00     X-sec =    0.3309
+theta = 108.00     X-sec =    0.3216
+theta = 109.00     X-sec =    0.3137
+theta = 110.00     X-sec =    0.3072
+theta = 111.00     X-sec =    0.3018
+theta = 112.00     X-sec =    0.2976
+theta = 113.00     X-sec =    0.2943
+theta = 114.00     X-sec =    0.2918
+theta = 115.00     X-sec =    0.2901
+theta = 116.00     X-sec =    0.2889
+theta = 117.00     X-sec =    0.2881
+theta = 118.00     X-sec =    0.2878
+theta = 119.00     X-sec =    0.2877
+theta = 120.00     X-sec =    0.2877
+theta = 121.00     X-sec =    0.2878
+theta = 122.00     X-sec =    0.2879
+theta = 123.00     X-sec =    0.2877
+theta = 124.00     X-sec =    0.2873
+theta = 125.00     X-sec =    0.2864
+theta = 126.00     X-sec =    0.2849
+theta = 127.00     X-sec =    0.2829
+theta = 128.00     X-sec =    0.2802
+theta = 129.00     X-sec =    0.2768
+theta = 130.00     X-sec =    0.2727
+theta = 131.00     X-sec =    0.2681
+theta = 132.00     X-sec =    0.2629
+theta = 133.00     X-sec =    0.2574
+theta = 134.00     X-sec =    0.2516
+theta = 135.00     X-sec =    0.2455
+theta = 136.00     X-sec =    0.2393
+theta = 137.00     X-sec =    0.2331
+theta = 138.00     X-sec =    0.2267
+theta = 139.00     X-sec =    0.2202
+theta = 140.00     X-sec =    0.2137
+theta = 141.00     X-sec =    0.2070
+theta = 142.00     X-sec =    0.2001
+theta = 143.00     X-sec =    0.1932
+theta = 144.00     X-sec =    0.1861
+theta = 145.00     X-sec =    0.1790
+theta = 146.00     X-sec =    0.1719
+theta = 147.00     X-sec =    0.1649
+theta = 148.00     X-sec =    0.1581
+theta = 149.00     X-sec =    0.1515
+theta = 150.00     X-sec =    0.1453
+theta = 151.00     X-sec =    0.1395
+theta = 152.00     X-sec =    0.1341
+theta = 153.00     X-sec =    0.1293
+theta = 154.00     X-sec =    0.1249
+theta = 155.00     X-sec =    0.1209
+theta = 156.00     X-sec =    0.1175
+theta = 157.00     X-sec =    0.1146
+theta = 158.00     X-sec =    0.1121
+theta = 159.00     X-sec =    0.1101
+theta = 160.00     X-sec =    0.1086
+theta = 161.00     X-sec =    0.1074
+theta = 162.00     X-sec =    0.1067
+theta = 163.00     X-sec =    0.1063
+theta = 164.00     X-sec =    0.1062
+theta = 165.00     X-sec =    0.1063
+theta = 166.00     X-sec =    0.1067
+theta = 167.00     X-sec =    0.1072
+theta = 168.00     X-sec =    0.1079
+theta = 169.00     X-sec =    0.1087
+theta = 170.00     X-sec =    0.1096
+theta = 171.00     X-sec =    0.1105
+theta = 172.00     X-sec =    0.1114
+theta = 173.00     X-sec =    0.1124
+theta = 174.00     X-sec =    0.1133
+theta = 175.00     X-sec =    0.1142
+theta = 176.00     X-sec =    0.1150
+theta = 177.00     X-sec =    0.1156
+theta = 178.00     X-sec =    0.1161
+theta = 179.00     X-sec =    0.1164
+theta = 180.00     X-sec =    0.1166
+Now calculating the x-sec at Eb= 15.000
+Using finite range DWBA in IVA-prior form
+calculating cross section alpha_xA dependence 
+
+For alpha_xA=   1
+there are       26  channel couplings to be solved
+xsec=            0.59657
+
+For alpha_xA=   2
+there are       50  channel couplings to be solved
+xsec=            2.18690
+
+For alpha_xA=   3
+there are       73  channel couplings to be solved
+xsec=            3.51961
+
+For alpha_xA=   4
+there are       94  channel couplings to be solved
+xsec=            6.16563
+
+For alpha_xA=   5
+there are      114  channel couplings to be solved
+xsec=           10.38118
+
+For alpha_xA=   6
+there are      132  channel couplings to be solved
+xsec=            8.14483
+
+For alpha_xA=   7
+there are      149  channel couplings to be solved
+xsec=            6.50769
+
+For alpha_xA=   8
+there are      164  channel couplings to be solved
+xsec=            1.73424
+
+For alpha_xA=   9
+there are      178  channel couplings to be solved
+xsec=            0.67924
+
+For alpha_xA=  10
+there are      190  channel couplings to be solved
+xsec=            0.30321
+
+For alpha_xA=  11
+there are      201  channel couplings to be solved
+xsec=            0.14731
+
+For alpha_xA=  12
+there are      210  channel couplings to be solved
+xsec=            0.07770
+
+For alpha_xA=  13
+there are      218  channel couplings to be solved
+xsec=            0.04389
+
+                    (CPU  time =        2.29  seconds)
+--------------------------------------------------------
+alpha_xA =   1     X-sec =    0.5966
+alpha_xA =   2     X-sec =    2.1869
+alpha_xA =   3     X-sec =    3.5196
+alpha_xA =   4     X-sec =    6.1656
+alpha_xA =   5     X-sec =   10.3812
+alpha_xA =   6     X-sec =    8.1448
+alpha_xA =   7     X-sec =    6.5077
+alpha_xA =   8     X-sec =    1.7342
+alpha_xA =   9     X-sec =    0.6792
+alpha_xA =  10     X-sec =    0.3032
+alpha_xA =  11     X-sec =    0.1473
+alpha_xA =  12     X-sec =    0.0777
+alpha_xA =  13     X-sec =    0.0439
+The double differential cross sections
+
+theta =   0.00     X-sec =   35.7902
+theta =   1.00     X-sec =   35.7561
+theta =   2.00     X-sec =   35.6525
+theta =   3.00     X-sec =   35.4751
+theta =   4.00     X-sec =   35.2173
+theta =   5.00     X-sec =   34.8709
+theta =   6.00     X-sec =   34.4275
+theta =   7.00     X-sec =   33.8802
+theta =   8.00     X-sec =   33.2251
+theta =   9.00     X-sec =   32.4629
+theta =  10.00     X-sec =   31.6009
+theta =  11.00     X-sec =   30.6525
+theta =  12.00     X-sec =   29.6374
+theta =  13.00     X-sec =   28.5798
+theta =  14.00     X-sec =   27.5063
+theta =  15.00     X-sec =   26.4433
+theta =  16.00     X-sec =   25.4142
+theta =  17.00     X-sec =   24.4377
+theta =  18.00     X-sec =   23.5261
+theta =  19.00     X-sec =   22.6848
+theta =  20.00     X-sec =   21.9127
+theta =  21.00     X-sec =   21.2035
+theta =  22.00     X-sec =   20.5465
+theta =  23.00     X-sec =   19.9290
+theta =  24.00     X-sec =   19.3372
+theta =  25.00     X-sec =   18.7582
+theta =  26.00     X-sec =   18.1805
+theta =  27.00     X-sec =   17.5950
+theta =  28.00     X-sec =   16.9953
+theta =  29.00     X-sec =   16.3780
+theta =  30.00     X-sec =   15.7419
+theta =  31.00     X-sec =   15.0881
+theta =  32.00     X-sec =   14.4195
+theta =  33.00     X-sec =   13.7401
+theta =  34.00     X-sec =   13.0548
+theta =  35.00     X-sec =   12.3685
+theta =  36.00     X-sec =   11.6861
+theta =  37.00     X-sec =   11.0123
+theta =  38.00     X-sec =   10.3512
+theta =  39.00     X-sec =    9.7064
+theta =  40.00     X-sec =    9.0807
+theta =  41.00     X-sec =    8.4766
+theta =  42.00     X-sec =    7.8962
+theta =  43.00     X-sec =    7.3410
+theta =  44.00     X-sec =    6.8122
+theta =  45.00     X-sec =    6.3109
+theta =  46.00     X-sec =    5.8377
+theta =  47.00     X-sec =    5.3933
+theta =  48.00     X-sec =    4.9779
+theta =  49.00     X-sec =    4.5917
+theta =  50.00     X-sec =    4.2346
+theta =  51.00     X-sec =    3.9063
+theta =  52.00     X-sec =    3.6066
+theta =  53.00     X-sec =    3.3346
+theta =  54.00     X-sec =    3.0896
+theta =  55.00     X-sec =    2.8705
+theta =  56.00     X-sec =    2.6760
+theta =  57.00     X-sec =    2.5048
+theta =  58.00     X-sec =    2.3552
+theta =  59.00     X-sec =    2.2253
+theta =  60.00     X-sec =    2.1133
+theta =  61.00     X-sec =    2.0172
+theta =  62.00     X-sec =    1.9348
+theta =  63.00     X-sec =    1.8640
+theta =  64.00     X-sec =    1.8029
+theta =  65.00     X-sec =    1.7495
+theta =  66.00     X-sec =    1.7021
+theta =  67.00     X-sec =    1.6592
+theta =  68.00     X-sec =    1.6193
+theta =  69.00     X-sec =    1.5813
+theta =  70.00     X-sec =    1.5443
+theta =  71.00     X-sec =    1.5077
+theta =  72.00     X-sec =    1.4709
+theta =  73.00     X-sec =    1.4337
+theta =  74.00     X-sec =    1.3957
+theta =  75.00     X-sec =    1.3569
+theta =  76.00     X-sec =    1.3174
+theta =  77.00     X-sec =    1.2770
+theta =  78.00     X-sec =    1.2359
+theta =  79.00     X-sec =    1.1942
+theta =  80.00     X-sec =    1.1519
+theta =  81.00     X-sec =    1.1090
+theta =  82.00     X-sec =    1.0658
+theta =  83.00     X-sec =    1.0223
+theta =  84.00     X-sec =    0.9786
+theta =  85.00     X-sec =    0.9348
+theta =  86.00     X-sec =    0.8911
+theta =  87.00     X-sec =    0.8476
+theta =  88.00     X-sec =    0.8045
+theta =  89.00     X-sec =    0.7621
+theta =  90.00     X-sec =    0.7204
+theta =  91.00     X-sec =    0.6799
+theta =  92.00     X-sec =    0.6407
+theta =  93.00     X-sec =    0.6030
+theta =  94.00     X-sec =    0.5672
+theta =  95.00     X-sec =    0.5333
+theta =  96.00     X-sec =    0.5017
+theta =  97.00     X-sec =    0.4723
+theta =  98.00     X-sec =    0.4455
+theta =  99.00     X-sec =    0.4211
+theta = 100.00     X-sec =    0.3993
+theta = 101.00     X-sec =    0.3799
+theta = 102.00     X-sec =    0.3629
+theta = 103.00     X-sec =    0.3482
+theta = 104.00     X-sec =    0.3355
+theta = 105.00     X-sec =    0.3248
+theta = 106.00     X-sec =    0.3157
+theta = 107.00     X-sec =    0.3080
+theta = 108.00     X-sec =    0.3017
+theta = 109.00     X-sec =    0.2964
+theta = 110.00     X-sec =    0.2921
+theta = 111.00     X-sec =    0.2885
+theta = 112.00     X-sec =    0.2856
+theta = 113.00     X-sec =    0.2832
+theta = 114.00     X-sec =    0.2812
+theta = 115.00     X-sec =    0.2796
+theta = 116.00     X-sec =    0.2782
+theta = 117.00     X-sec =    0.2770
+theta = 118.00     X-sec =    0.2758
+theta = 119.00     X-sec =    0.2746
+theta = 120.00     X-sec =    0.2733
+theta = 121.00     X-sec =    0.2718
+theta = 122.00     X-sec =    0.2700
+theta = 123.00     X-sec =    0.2679
+theta = 124.00     X-sec =    0.2654
+theta = 125.00     X-sec =    0.2625
+theta = 126.00     X-sec =    0.2591
+theta = 127.00     X-sec =    0.2554
+theta = 128.00     X-sec =    0.2511
+theta = 129.00     X-sec =    0.2465
+theta = 130.00     X-sec =    0.2413
+theta = 131.00     X-sec =    0.2358
+theta = 132.00     X-sec =    0.2299
+theta = 133.00     X-sec =    0.2236
+theta = 134.00     X-sec =    0.2170
+theta = 135.00     X-sec =    0.2101
+theta = 136.00     X-sec =    0.2030
+theta = 137.00     X-sec =    0.1958
+theta = 138.00     X-sec =    0.1886
+theta = 139.00     X-sec =    0.1814
+theta = 140.00     X-sec =    0.1744
+theta = 141.00     X-sec =    0.1677
+theta = 142.00     X-sec =    0.1612
+theta = 143.00     X-sec =    0.1551
+theta = 144.00     X-sec =    0.1494
+theta = 145.00     X-sec =    0.1440
+theta = 146.00     X-sec =    0.1390
+theta = 147.00     X-sec =    0.1344
+theta = 148.00     X-sec =    0.1301
+theta = 149.00     X-sec =    0.1262
+theta = 150.00     X-sec =    0.1228
+theta = 151.00     X-sec =    0.1197
+theta = 152.00     X-sec =    0.1171
+theta = 153.00     X-sec =    0.1149
+theta = 154.00     X-sec =    0.1132
+theta = 155.00     X-sec =    0.1121
+theta = 156.00     X-sec =    0.1114
+theta = 157.00     X-sec =    0.1113
+theta = 158.00     X-sec =    0.1116
+theta = 159.00     X-sec =    0.1124
+theta = 160.00     X-sec =    0.1136
+theta = 161.00     X-sec =    0.1151
+theta = 162.00     X-sec =    0.1170
+theta = 163.00     X-sec =    0.1191
+theta = 164.00     X-sec =    0.1215
+theta = 165.00     X-sec =    0.1241
+theta = 166.00     X-sec =    0.1269
+theta = 167.00     X-sec =    0.1297
+theta = 168.00     X-sec =    0.1327
+theta = 169.00     X-sec =    0.1356
+theta = 170.00     X-sec =    0.1386
+theta = 171.00     X-sec =    0.1414
+theta = 172.00     X-sec =    0.1441
+theta = 173.00     X-sec =    0.1466
+theta = 174.00     X-sec =    0.1488
+theta = 175.00     X-sec =    0.1508
+theta = 176.00     X-sec =    0.1524
+theta = 177.00     X-sec =    0.1537
+theta = 178.00     X-sec =    0.1546
+theta = 179.00     X-sec =    0.1551
+theta = 180.00     X-sec =    0.1553
+
+  The following files have been created:
+    1: local copy of input.                      2: phase-shifts for incoming channel.      
+    3: S-matrix for incoming channel.            4: radial part of Wf of channel a.         
+    7: bound-state wf of channel p.              8: channels coupling index.                
+   14: |\Psi_{xA}| in la.                       19: cross section J_parity distribution.    
+   20: cross section alpha_xA distribution.     21: double cross section angular distributio
+   22: cross section energy distribution.       23: cross section la distribution.          
+   24: cross section lb distribution.           30: potential used in the calcuation.       
+   31: Wx(rx).                                  32: parameters of calculated potentials.    
+  101: radial part of wf of channel b.         151: radial part of wf of channel b in grid p
+  201: regular part of Gx.                     251: irregular part of Gx.                   
+ Precision version: 168f7a8
+ Date             : Fri Mar 28 10:10:14 2025 +0800
+ Init precision:            4           8
+ eps:               0.0000000000000000        1.1102230246251565E-016
+ COMPDATE: Mon Mar 31 10:43:39 CST 2025
+ F90: gfortran
+ F77: gfortran
+ MAKEFOPT1:  -fPIC -fopenmp  -g  -fcheck=all -O3   
+ MAKEFOPT2:  -ffixed-line-length-0
+ MAKEFOPT3:  
+ MAKEFOPT4:  -Wunused-variable
+ MAKEFOPT5:  
+ MAKEFOPT6:  
+ MAKEFOPT7:  
+ MAKEFOPT8:  
+ CC:  gfortran
+ CC:  -O3
+ LIBSTD1:  -L /usr/lib/x86_64-linux-gnu/ -llapack 
+ LIBSTD2:  
+ LIBSTD3:  
+ LIBSTD4:  
+ LIBSTD5:  
+ LIBSTD6:  
+ LIBSTD7:  
+ LIBSTD8:  
+ Thread           0 getting environment information
+ Number of processors =           10
+ Number of threads =           10
+ Max threads =           10
+ smoothie version Date: Fri Mar 28 10:10:14 2025 +0800
+ smoothie git version: 168f7a8
+ smoothie compile Date:Mon Mar 31 10:43:39 CST 2025
+                    (CPU  time =       16.93  seconds)
