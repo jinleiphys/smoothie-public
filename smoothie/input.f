@@ -69,28 +69,26 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        real*8  :: ecut, dump
        real*8 ::  renv,renw,renvd,renwd,renvls,renwls ! AMoro
        logical :: simpson_int
-       integer :: ios
+      !  integer :: ios
 
 
 c      character(len=5) :: decide1,decide2
-      namelist /global/ hcm,lmax,elab,thmin,thmax,thinc,icf,HM,UT,
-     &                  cutl,lmin,nx,rmax,nr,prior,printf,jtmax,jtmin,printlx,
-     &                  dwba,cdcc,cdccebu,surfacebw,surfacesw,rs,lxmax,lxmin,ubx, adde,
-     &                  simpson_int
+      namelist /global/ hcm,lmax,elab,thmin,thmax,thinc,
+     &                  lmin,nx,rmax,nr,printf,jtmax,jtmin,
+     &                  dwba,lxmax,lxmin
 
       namelist /system/ namep,massp,zp,jp,namet,masst,zt,jt,
      &                   nameb,massb,zb,jb,namex,massx,zx,jx,sbx,
-     &                   qval,neb,lbx,nodes,be, ptyp, ptyt, ptyb, ptyx,
-     &                  gswf ! added by AMoro
+     &                   lbx,nodes,be, ptyp, ptyt, ptyb, ptyx
 
-      namelist /outgoing/ ecmbmin,ecmbmax,ecmbh,bin,wbin
 
-      namelist /potential/ kp1,kp2,ptype,a1,a2,rc,uv,av,
-     &                      rv,uw,aw,rw,vsov,rsov,asov,uw1,aw1,rw1,
-     &                      vsow,rsow,asow,vd,avd,rvd,wd,awd,rwd,Ecut,dump,
-     &                      renv,renw,renvd,renwd,renvls,renwls,efix ! AMoro
+      namelist /outgoing/ ecmbmin,ecmbmax,ecmbh
 
-      namelist /vincent/ Pi_ext_ny,Pi_ext_ymax,VF
+      namelist /potential/ kp1,ptype,a1,a2,rc,uv,av,
+     &                      rv,uw,aw,rw,vsov,rsov,asov,
+     &                      vsow,rsow,asow,vd,avd,rvd,wd,awd,rwd
+
+      ! namelist /vincent/ Pi_ext_ny,Pi_ext_ymax,VF
 
        written=.false.
        written(1)=.true.;
@@ -100,7 +98,7 @@ c /global/
        hcm=0.05_dpreal;r1=15_dpreal;r2=60_dpreal;rmax=7000_dpreal
        lmax=30;elab=0.0_dpreal
        thmin=0.0_dpreal;thmax=180.0_dpreal;thinc=1.0_dpreal
-       cutl=200;lmin=0;nx=30;prior=.false.
+       cutl=200;lmin=0;nx=30;prior=.true.
        nr=60;printf=.false.;icf=.false.
        jtmin=0.0_dpreal
        jtmax=-30.0_dpreal
@@ -215,7 +213,7 @@ c      if (ecmbh<0.000001) then
       nwd=0.0_dpreal
       
       do
-       kp1=' ';kp2=0;ptype=0;a1=0.0d0;a2=0.0d0;uv=-99.0d0;av=0.1d0
+       kp1=' ';kp2=1;ptype=0;a1=0.0d0;a2=0.0d0;uv=-99.0d0;av=0.1d0
        rv=0.0d0
        uw=0.0d0;aw=0.1d0;rw=0.0d0;rc=1.3d0;vsov=0.0d0;rsov=0.0d0
        asov=0.1d0; vsow=0.0d0;rsow=0.0d0;asow=0.1d0
