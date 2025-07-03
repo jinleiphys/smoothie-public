@@ -79,7 +79,7 @@ c      character(len=5) :: decide1,decide2
 
       namelist /system/ namep,massp,zp,jp,namet,masst,zt,jt,
      &                   nameb,massb,zb,jb,namex,massx,zx,jx,sbx,
-     &                   lbx,nodes,be, ptyp, ptyt, ptyb, ptyx
+     &                   lbx,nodes,be
 
 
       namelist /outgoing/ ecmbmin,ecmbmax,ecmbh
