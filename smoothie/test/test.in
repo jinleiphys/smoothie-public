@@ -10,7 +10,7 @@ NAMELIST
             namex='n'     massx=1.0087   zx=0.0    jx=0.  lbx=0    nodes=1  /
 
 
-&OUTGOING   ecmbmin=10 ecmbmax=15 ecmbh=1  /
+&OUTGOING   ecmbmin=2 ecmbmax=30 ecmbh=1  /
 
 
 &OUTGOING /
