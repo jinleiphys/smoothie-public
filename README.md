@@ -156,8 +156,6 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 | Command | Description |
 |---------|-------------|
 | `make` | Standard build |
-| `make DEBUG=1` | Debug build |
-| `make OPTIMIZE=1` | Optimized build |
 | `make clean` | Clean build files |
 
 ### Supported Platforms
