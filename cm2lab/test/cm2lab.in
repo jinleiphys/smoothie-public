@@ -1,0 +1,10 @@
+NAMELIST
+&cmsys  m1=2 m2=93 m3=1 m4=94 elab=25.5 ecmfmin=2  
+          ecmfmax=30 ecmfh=1 thcmmin=0 thcmmax=180 thcminc=1 lmax=12 /
+&labsys      elabmin=1 elabmax=31 elabh=2 thlabmin=1 thlabmax=180 
+          thlabinc=1 ptheta=2  pelab=2 /
+          
+          
+          
+          
+          
