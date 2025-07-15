@@ -18,7 +18,7 @@
 ### Prerequisites
 
 Before contributing, ensure you have:
-- **Fortran 95/2003** compiler (gfortran 4.8+, ifort 14+)
+- **Modern Fortran** compiler (gfortran 4.8+, ifort 14+)
 - **Git** for version control
 - **Make** build system
 - **LAPACK/BLAS** libraries (recommended)
@@ -108,7 +108,7 @@ We welcome several types of contributions:
 ### Fortran Coding Standards
 
 **General Principles:**
-- Follow **Fortran 95/2003** standards
+- Follow **Modern Fortran** standards
 - Use **meaningful variable names**
 - Add **comments** for complex physics
 - Maintain **consistent indentation** (2 spaces)

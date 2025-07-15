@@ -4,7 +4,7 @@
 
 **S**cattering **M**odel of **O**ptical **O**perator **Th**eory for **I**chimura-**A**ustern-**V**incent **E**quations
 
-*A Fortran 95 code for non-elastic breakup calculations in inclusive breakup reactions*
+*A Modern Fortran code for non-elastic breakup calculations in inclusive breakup reactions*
 
 [![Website](https://img.shields.io/badge/Website-smoothie.fewbody.com-blue)](https://smoothie.fewbody.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -25,7 +25,7 @@ a(=b+x) + A → b + B*, where B* = (x+A)**
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **Fortran 95** compiler (gfortran, ifort, etc.)
+- **Modern Fortran** compiler (gfortran, ifort, etc.)
 - **Make** build system
 - **LAPACK/BLAS** libraries (recommended)
 
