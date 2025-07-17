@@ -1,0 +1,99 @@
+SMOOTHIE - Scattering Model of Optical Operator Theory for Ichimura-Austern-Vincent Equations
+
+Copyright (c) 2025 Jin Lei and Antonio M. Moro
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software with restrictions on publishing. Users may use, modify, and 
+distribute the Software for research and educational purposes, but may NOT 
+publish, sublicense, or sell copies of the Software without explicit written 
+permission from the copyright holders, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+SMOOTHIE is a Modern Fortran code for non-elastic breakup calculations in 
+inclusive breakup reactions using the formalism of Ichimura, Austern and Vincent.
+
+For more information, visit: https://smoothie.fewbody.com
+
+If you use this software in your research, please cite the following papers:
+
+1. First Numerical Calculation with AHUA Code:
+   "Reexamining closed-form formulae for inclusive breakup: Application to deuteron- and ⁶Li-induced reactions"
+   Jin Lei and A. M. Moro
+   Phys. Rev. C 92, 044616 (2015)
+   DOI: 10.1103/PhysRevC.92.044616
+   URL: https://journals.aps.org/prc/abstract/10.1103/PhysRevC.92.044616
+
+   BibTeX:
+   @article{PhysRevC.92.044616,
+     title = {Reexamining closed-form formulae for inclusive breakup: Application to deuteron- and $^{6}\\mathrm{Li}$-induced reactions},
+     author = {Lei, Jin and Moro, A. M.},
+     journal = {Phys. Rev. C},
+     volume = {92},
+     issue = {4},
+     pages = {044616},
+     numpages = {14},
+     year = {2015},
+     month = {Oct},
+     publisher = {American Physical Society},
+     doi = {10.1103/PhysRevC.92.044616},
+     url = {https://link.aps.org/doi/10.1103/PhysRevC.92.044616}
+   }
+
+2. First Derivation of Formulas Used in SMOOTHIE:
+   "Inclusive breakup calculations in angular momentum basis: Application to ⁷Li+⁵⁸Ni"
+   Jin Lei
+   Phys. Rev. C 97, 034628 (2018)
+   DOI: 10.1103/PhysRevC.97.034628
+   URL: https://journals.aps.org/prc/abstract/10.1103/PhysRevC.97.034628
+
+   BibTeX:
+   @article{PhysRevC.97.034628,
+     title = {Inclusive breakup calculations in angular momentum basis: Application to $^{7}\\mathrm{Li}+^{58}\\mathrm{Ni}$},
+     author = {Lei, Jin},
+     journal = {Phys. Rev. C},
+     volume = {97},
+     issue = {3},
+     pages = {034628},
+     numpages = {7},
+     year = {2018},
+     month = {Mar},
+     publisher = {American Physical Society},
+     doi = {10.1103/PhysRevC.97.034628},
+     url = {https://link.aps.org/doi/10.1103/PhysRevC.97.034628}
+   }
+
+3. Theory of the R-matrix Method Used in SMOOTHIE:
+   "Lagrange-mesh R-matrix method for inhomogeneous equations"
+   Jin Lei and Pierre Descouvemont
+   Phys. Rev. C 102, 014608 (2020)
+   DOI: 10.1103/PhysRevC.102.014608
+   URL: https://journals.aps.org/prc/abstract/10.1103/PhysRevC.102.014608
+
+   BibTeX:
+   @article{PhysRevC.102.014608,
+     title = {Lagrange-mesh $R$-matrix method for inhomogeneous equations},
+     author = {Lei, Jin and Descouvemont, Pierre},
+     journal = {Phys. Rev. C},
+     volume = {102},
+     issue = {1},
+     pages = {014608},
+     numpages = {7},
+     year = {2020},
+     month = {Jul},
+     publisher = {American Physical Society},
+     doi = {10.1103/PhysRevC.102.014608},
+     url = {https://link.aps.org/doi/10.1103/PhysRevC.102.014608}
+   }
