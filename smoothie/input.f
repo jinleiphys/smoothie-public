@@ -686,6 +686,96 @@ C     Done
 
       END subroutine
 
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      subroutine write_cm2lab_input()
+c     Generate cm2lab.in file for center-of-mass to lab transformation
+cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+      use systems
+      use channels
+      use mesh
+      implicit none
+      
+      real*8 :: m1, m2, m3, m4
+      real*8 :: ecmfmin, ecmfmax, ecmfh
+      real*8 :: thcmmin, thcmmax, thcminc
+      real*8 :: elabmin, elabmax, elabh
+      real*8 :: thlabmin, thlabmax, thlabinc
+      real*8 :: ptheta, pelab
+      real*8 :: the_int_min, the_int_max
+      integer :: nefac, lmax_local
+      character*20 :: filecm
+      
+      write(*,*) 'Generating cm2lab.in file...'
+      
+      m1 = massp
+      m2 = masst  
+      m3 = massb
+      m4 = masst + massx
+      
+      ! Note: elab is already available from systems module
+      
+      ecmfmin = necmb(1)
+      ecmfmax = necmb(neb)
+      if (neb > 1) then
+         ecmfh = necmb(2) - necmb(1)
+      else
+         ecmfh = 1.0d0
+      endif
+      
+      thcmmin = thmin
+      thcmmax = thmax
+      thcminc = thinc
+      
+      ! Set lmax for cm2lab (use 0 to avoid reading fort.20 file)
+      lmax_local = min(lxmax, lmax)
+      
+      ! Set optional parameters
+      the_int_min = -99.0d0
+      the_int_max = -99.0d0
+      nefac = 1
+      filecm = ""  ! Empty means read from stdin
+      
+      elabmin = 1.0d0
+      elabmax = 31.0d0
+      elabh = 2.0d0
+      
+      thlabmin = 1.0d0
+      thlabmax = 180.0d0
+      thlabinc = 1.0d0
+      
+      ptheta = 2.0d0
+      pelab = 2.0d0
+      
+      open(unit=99, file='cm2lab.in', status='replace')
+      
+      write(99,*) 'NAMELIST'
+      write(99,*) '&cmsys  m1=',m1,' m2=',m2,' m3=',m3,' m4=',m4,
+     &            ' elab=',elab,' ecmfmin=',ecmfmin,
+     &            ' ecmfmax=',ecmfmax,' ecmfh=',ecmfh,
+     &            ' thcmmin=',thcmmin,' thcmmax=',thcmmax,
+     &            ' thcminc=',thcminc,' lmax=',lmax_local,' /'
+      write(99,*) '&labsys      elabmin=',elabmin,' elabmax=',elabmax,
+     &            ' elabh=',elabh,' thlabmin=',thlabmin,
+     &            ' thlabmax=',thlabmax,' thlabinc=',thlabinc,
+     &            ' ptheta=',ptheta,' pelab=',pelab,' /'
+      
+      close(99)
+      
+      write(*,*) 'cm2lab.in file generated successfully!'
+      write(*,*) 'Parameters:'
+      write(*,100) m1,m2,m3,m4
+      write(*,110) elab
+      write(*,120) ecmfmin,ecmfmax,ecmfh
+      write(*,130) thcmmin,thcmmax,thcminc
+      write(*,140) lmax_local
+      
+100   format('  Masses: m1=',F8.4,' m2=',F8.4,' m3=',F8.4,' m4=',F8.4)
+110   format('  Lab energy:',F8.2,' MeV')
+120   format('  CM energy range:',F8.2,'-',F8.2,' MeV (step:',F6.2,')')
+130   format('  CM angle range:',F6.1,'-',F6.1,' deg (step:',F4.1,')')
+140   format('  lmax:',I3)
+      
+      end subroutine
 
 
 

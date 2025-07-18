@@ -51,6 +51,8 @@ c-----------------------------------------------------------------------
 
       call fkind()
 
+      call write_cm2lab_input() 
+
       call init_eps
       call print_eps
 ! finish old style input

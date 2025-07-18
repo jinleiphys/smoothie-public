@@ -360,6 +360,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       real*8 :: beta
       real*8,dimension(0:nthcm) :: xsec_lab,theta_lab
       real*8 :: fint2db,fint2db2,f2c,ffr4 ! 2-dimension interpolation
+      real*8 :: gamma,jacobian ! for theta=180 handling
       pi=acos(-1.0d0)
 
 
@@ -383,7 +384,29 @@ c     &                      necm+1)
             sinthcm=sin(jthcm*pi/180.)
             sinthlab=sin(thlab(j)*pi/180.)
 C           write(*,*)"sinthlab=",sinthlab
-            xseclabb(i,j)=sinthcm*ijcmsec/sinthlab
+            
+            ! Special handling for theta_lab = 0 or 180 degrees
+            if (abs(sinthlab) < 1.0d-8) then
+               ! At theta_lab = 0 or 180, use limiting behavior
+               if (abs(thlab(j)) < 1.0d-8) then
+                  ! Forward scattering: theta_lab = 0
+                  ! At theta_lab = 0, theta_cm = 0, so sin(theta_cm) = 0
+                  ! Use L'Hopital's rule limit: lim(sin(theta_cm)/sin(theta_lab)) = 1
+                  xseclabb(i,j) = ijcmsec
+               else
+                  ! Backward scattering: theta_lab = 180
+                  ! For theta_lab = 180, we need the proper Jacobian from kinematics
+                  ! At theta_lab = 180, the transformation involves gamma factor
+                  gamma=(m1*m3*ecmi/m2/(m1+m2)/elabb(i))**0.5
+                  ! The Jacobian at theta_lab = 180 is (1 + gamma)^2
+                  ! This comes from the kinematic transformation
+                  jacobian = (1.0d0 + gamma)**2
+                  xseclabb(i,j) = ijcmsec * jacobian
+               end if
+            else
+               ! Normal case
+               xseclabb(i,j)=sinthcm*ijcmsec/sinthlab
+            end if
 C            write(*,*)"xseclabb(i,j)=",xseclabb(i,j)
 C           stop
             write(911,*) thlab(j), xseclabb(i,j)
@@ -509,29 +532,60 @@ c-----------------------------------------------------------------------
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine lab2cm(ielab,jthlab,iecm,jthcm)
 c     this subroutine is used to transform from lab to C.M.
+c     Special handling for theta_lab=0 and theta_lab=180
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       use systems,only :m1,m2,m3,m4,ecmi
       implicit none
       real*8 :: ielab,jthlab,iecm,jthcm,pi
       real*8 :: beta,gamma,sinlab,coslab,tanthcm,sincm
+      real*8 :: eps
+      
       pi=acos(-1.0d0)
+      eps=1.0d-8  ! small number to avoid singularities
+      
+      ! Special handling for theta_lab = 0 degrees (forward scattering)
+      if (abs(jthlab) < eps) then
+         jthcm = 0.0d0
+         beta = 1.0d0
+         iecm = ielab
+         return
+      end if
+      
+      ! Special handling for theta_lab = 180 degrees (backscattering)  
+      if (abs(jthlab - 180.0d0) < eps) then
+         jthcm = 180.0d0
+         gamma=(m1*m3*ecmi/m2/(m1+m2)/ielab)**0.5
+         beta = (1.0d0 + gamma)**2
+         iecm = ielab/beta/beta
+         return
+      end if
+      
+      ! Normal case - original algorithm
       sinlab=sin(jthlab*pi/180.)
       coslab=cos(jthlab*pi/180.)
       gamma=(m1*m3*ecmi/m2/(m1+m2)/ielab)**0.5
-      tanthcm=sinlab/(coslab-gamma)
-c Note that atan() is defined between (-pi/2,pi/2)
-      jthcm=atan (tanthcm)
-      if (jthcm < 0.0d0) jthcm=jthcm+pi
-
-      sincm=sin(jthcm)
-      jthcm=jthcm*180.0d0/pi
-c
-      beta=sincm/sinlab
-
-
-
+      
+      ! Check for potential division by zero
+      if (abs(coslab-gamma) < eps) then
+         ! Use approximation near singular point
+         jthcm = 90.0d0  ! perpendicular scattering
+         beta = sqrt(1.0d0 + gamma**2)
+      else
+         tanthcm=sinlab/(coslab-gamma)
+         jthcm=atan(tanthcm)
+         if (jthcm < 0.0d0) jthcm=jthcm+pi
+         jthcm=jthcm*180.0d0/pi
+         
+         sincm=sin(jthcm*pi/180.)
+         if (abs(sinlab) < eps) then
+            beta = 1.0d0
+         else
+            beta=sincm/sinlab
+         end if
+      end if
+      
+      if (abs(beta) < eps) beta = eps  ! avoid division by zero
       iecm=ielab/beta/beta
-
 
       end subroutine
 
@@ -539,23 +593,58 @@ c
 
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       subroutine cmth2labth(iecm,jthcm,jthlab,beta)
-c     this subroutine is used to transform from lab to C.M.
+c     this subroutine is used to transform from C.M. to lab
+c     Special handling for theta_cm=0 and theta_cm=180
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       use systems,only :m1,m2,m3,m4,ecmi
       implicit none
       real*8 :: jthlab,iecm,jthcm,pi
       real*8 :: beta,gamma,sincm,coscm,tanthlab
+      real*8 :: eps
+      
       pi=acos(-1d0)
+      eps=1.0d-8  ! small number to avoid singularities
+      
+      ! Special handling for theta_cm = 0 degrees (forward scattering)
+      if (abs(jthcm) < eps) then
+         jthlab = 0.0d0
+         beta = 1.0d0
+         return
+      end if
+      
+      ! Special handling for theta_cm = 180 degrees (backscattering)
+      if (abs(jthcm - 180.0d0) < eps) then
+         jthlab = 180.0d0
+         gamma=(m1*m3*ecmi/m2/(m1+m2)/iecm)**0.5
+         beta = (1.0d0 + gamma)**2
+         return
+      end if
+      
+      ! Normal case - original algorithm
       sincm=sin(jthcm*pi/180.)
       coscm=cos(jthcm*pi/180.)
       gamma=(m1*m3*ecmi/m2/(m1+m2)/iecm)**0.5
-      tanthlab=sincm/(coscm+gamma)
-c Note that atan() is defined between (-pi/2,pi/2)
-      jthlab=atan (tanthlab)
-      if (jthlab < 0.0d0) jthlab=jthlab+pi
-      jthlab=jthlab*180.0d0/pi
-c
-      beta=(1+gamma**2+2*gamma*coscm)**1.5/abs(1+gamma*coscm)
+      
+      ! Check for potential division by zero
+      if (abs(coscm+gamma) < eps) then
+         ! Use approximation near singular point
+         jthlab = 90.0d0  ! perpendicular scattering
+         beta = sqrt(1.0d0 + gamma**2)
+      else
+         tanthlab=sincm/(coscm+gamma)
+         jthlab=atan(tanthlab)
+         if (jthlab < 0.0d0) jthlab=jthlab+pi
+         jthlab=jthlab*180.0d0/pi
+         
+         ! Calculate beta with protection against division by zero
+         if (abs(1+gamma*coscm) < eps) then
+            beta = 1.0d0
+         else
+            beta=(1+gamma**2+2*gamma*coscm)**1.5/abs(1+gamma*coscm)
+         end if
+      end if
+      
+      if (abs(beta) < eps) beta = eps  ! avoid division by zero
       end subroutine
 
 
