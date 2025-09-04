@@ -809,7 +809,7 @@ C      sbx=in3b%s2b(alpha_in)
         call Y_Y_couplings(LL,alphabar,Y4)
         do nS=nSmin,nSmax,2
            SS=nS/2.0_dpreal
-           if (nint(2.*abs(LL-SS))>nint(2.*Jtot) .and.
+           if (nint(2.*abs(LL-SS))>nint(2.*Jtot) .or.
      +      nint(2.*(LL+SS))<nint(2.*Jtot)) cycle
 
 
