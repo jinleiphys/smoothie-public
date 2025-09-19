@@ -817,7 +817,7 @@ C      sbx=in3b%s2b(alpha_in)
            c3u9coef=u9(lx*1.0_dpreal,sxA,JxA,lamb*1.0_dpreal,jb,Jbb,LL*1.0_dpreal,SS,Jtot)
            c6u9coef=u9(lbx*1.0_dpreal,sbx,Jbx,lama*1.0_dpreal,jA,JAA,LL*1.0_dpreal,SS,Jtot)
 
-           NA=(-1)**nint(sbx+3.0*jA+2.0*jx+2.0*jb+SS)*hat(SS)
+           NA=(-1)**nint(sxA+3.0*jb+2.0*jx+2.0*jA+SS)*hat(SS)
      +      *hat(SS)*hat(Jbx)*hat(JAA)*hat(sbx)*hat(sxA)*hat(JxA)
      +      *hat(Jbb)*u6coef*c3u9coef*c6u9coef
            Gabar=Gabar+NA*Y4
