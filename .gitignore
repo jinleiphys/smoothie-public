@@ -1,0 +1,32 @@
+# Auto-generated GUI launcher script
+run_smoothie_gui.sh
+
+# Fortran build artifacts
+*.o
+*.mod
+*.a
+
+# Executables
+smoothie/smoothie
+cm2lab/cm2lab
+
+# Build directories
+**/build/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Fortran output files (test results)
+fort.*
+
+# macOS
+.DS_Store
+
+# Editor temporary files
+*~
+*.swp
+*.swo
