@@ -240,15 +240,10 @@ C     write(*,*)"ecmb=",ecmb(i)
         xyt(2,1:nthcm+1) = thcm(0:nthcm)
 
 
-      do i=-20,necm+20
+      do i=0,necm
          iecm=ecmfmin+i*ecmfh
          do j=0,nthcm
-
-           if (i>=0 .and. i<=necm ) then
               write(918,*)thcm(j),iecm,xsecmf(i,j)
-           else
-              write(918,*)thcm(j),iecm,xsecmf(i,j)
-           end if
          end do
           write(918,*) ' '
       end do
