@@ -545,11 +545,11 @@ cWrite output files units and names
        if(printf) written(13)=.TRUE.
        
        flkind(14)='|\Psi_{xA}| in la'
-       written(14)=.TRUE.
+       written(14)=.FALSE.
 
 
        flkind(19)='x-section J_parity distribution'
-       written(19)=.TRUE.
+       written(19)=.FALSE.
        flkind(20)='x-section alpha_xA distribution'
        written(20)=.TRUE.
        flkind(21)='double x-section angular distribution'
