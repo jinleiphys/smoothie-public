@@ -15,6 +15,7 @@ from plot_widget import PlotWidget
 from log_widget import LogWidget
 from runner import SmoothieRunner
 from styles import apply_modern_style
+from path_utils import get_repo_root, find_executable, get_default_test_directory, get_executable_info
 
 
 class MainWindow(QMainWindow):
@@ -26,6 +27,10 @@ class MainWindow(QMainWindow):
         self.current_file = None
         self.working_directory = None  # Store current working directory
         self.is_running_smoothie = False  # Track whether SMOOTHIE or CM2LAB is running
+
+        # Detect repository root and default paths
+        self.repo_root = get_repo_root()
+        self.default_test_dir = get_default_test_directory(self.repo_root)
 
         self.init_ui()
         self.setup_connections()
@@ -244,7 +249,7 @@ class MainWindow(QMainWindow):
         file_path, _ = QFileDialog.getOpenFileName(
             self,
             "Open SMOOTHIE Input File",
-            os.path.expanduser("~/Desktop/code/smoothie-public/smoothie/test"),
+            self.default_test_dir,
             "Input Files (*.in);;All Files (*)"
         )
 
@@ -268,7 +273,7 @@ class MainWindow(QMainWindow):
         file_path, _ = QFileDialog.getSaveFileName(
             self,
             "Save SMOOTHIE Input File",
-            os.path.expanduser("~/Desktop/code/smoothie-public/smoothie/test"),
+            self.default_test_dir,
             "Input Files (*.in);;All Files (*)"
         )
 
@@ -288,9 +293,10 @@ class MainWindow(QMainWindow):
 
     def load_example(self):
         """Load an example input file"""
-        example_path = os.path.expanduser(
-            "~/Desktop/code/smoothie-public/smoothie/test/test.in"
-        )
+        if self.repo_root:
+            example_path = os.path.join(self.repo_root, "smoothie", "test", "test.in")
+        else:
+            example_path = os.path.join(self.default_test_dir, "test.in")
 
         if os.path.exists(example_path):
             try:
@@ -304,9 +310,7 @@ class MainWindow(QMainWindow):
     def run_smoothie(self):
         """Run SMOOTHIE calculation"""
         # Ask user for working directory
-        default_dir = self.working_directory if self.working_directory else os.path.expanduser(
-            "~/Desktop/code/smoothie-public/smoothie/test"
-        )
+        default_dir = self.working_directory if self.working_directory else self.default_test_dir
 
         work_dir = QFileDialog.getExistingDirectory(
             self,
@@ -343,18 +347,14 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Error", f"Failed to create input file:\n{str(e)}")
             return
 
-        # Find SMOOTHIE executable
-        smoothie_exe = os.path.expanduser(
-            "~/Desktop/code/smoothie-public/smoothie/smoothie"
-        )
+        # Find SMOOTHIE executable using intelligent path detection
+        smoothie_exe, error_message, found = get_executable_info("smoothie", self.repo_root)
 
-        if not os.path.exists(smoothie_exe):
-            QMessageBox.critical(
-                self, "Error",
-                f"SMOOTHIE executable not found at:\n{smoothie_exe}\n\n"
-                "Please build SMOOTHIE first."
-            )
+        if not found:
+            QMessageBox.critical(self, "Error", error_message)
             return
+
+        self.log_widget.append_info(f"Using SMOOTHIE executable: {smoothie_exe}")
 
         # Pass working directory to runner
         self.is_running_smoothie = True  # Set flag before running SMOOTHIE
@@ -385,18 +385,14 @@ class MainWindow(QMainWindow):
             self.log_widget.append_info("Generated cm2lab.in")
             self.log_widget.append_info("Running CM2LAB...")
 
-            # Find cm2lab executable
-            cm2lab_exe = os.path.expanduser(
-                "~/Desktop/code/smoothie-public/cm2lab/cm2lab"
-            )
+            # Find cm2lab executable using intelligent path detection
+            cm2lab_exe, error_message, found = get_executable_info("cm2lab", self.repo_root)
 
-            if not os.path.exists(cm2lab_exe):
-                QMessageBox.critical(
-                    self, "Error",
-                    f"CM2LAB executable not found at:\n{cm2lab_exe}\n\n"
-                    "Please build CM2LAB first."
-                )
+            if not found:
+                QMessageBox.critical(self, "Error", error_message)
                 return
+
+            self.log_widget.append_info(f"Using CM2LAB executable: {cm2lab_exe}")
 
             # Run CM2LAB
             self.is_running_smoothie = False  # Set flag before running CM2LAB
