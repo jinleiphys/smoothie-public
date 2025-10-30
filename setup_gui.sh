@@ -41,32 +41,160 @@ cd "$SCRIPT_DIR"
 print_info "Working directory: $SCRIPT_DIR"
 echo ""
 
-# Step 1: Check if conda is installed
+# Step 1: Check and install conda if needed
 print_info "Checking for conda installation..."
 if ! command -v conda &> /dev/null; then
-    print_error "conda not found! Please install Anaconda or Miniconda first."
-    echo "Download from: https://docs.conda.io/en/latest/miniconda.html"
-    exit 1
+    print_warning "conda not found!"
+    echo ""
+    read -p "Do you want to install Miniconda? (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        print_info "Installing Miniconda..."
+
+        # Detect OS
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            # macOS
+            if [[ $(uname -m) == "arm64" ]]; then
+                MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh"
+            else
+                MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+            fi
+        elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+            # Linux
+            MINICONDA_URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+        else
+            print_error "Unsupported operating system: $OSTYPE"
+            exit 1
+        fi
+
+        # Download and install Miniconda
+        TEMP_INSTALLER="/tmp/miniconda_installer.sh"
+        print_info "Downloading Miniconda from $MINICONDA_URL..."
+        curl -L -o "$TEMP_INSTALLER" "$MINICONDA_URL"
+
+        print_info "Running Miniconda installer..."
+        bash "$TEMP_INSTALLER" -b -p "$HOME/miniconda3"
+        rm "$TEMP_INSTALLER"
+
+        # Initialize conda
+        print_info "Initializing conda..."
+        "$HOME/miniconda3/bin/conda" init bash
+
+        # Source conda for current session
+        source "$HOME/miniconda3/etc/profile.d/conda.sh"
+
+        print_success "Miniconda installed successfully!"
+        print_warning "Please restart your terminal or run: source ~/.bashrc (or ~/.zshrc)"
+    else
+        print_error "conda is required to continue. Exiting."
+        exit 1
+    fi
+else
+    print_success "conda found: $(conda --version)"
 fi
-print_success "conda found: $(conda --version)"
 echo ""
 
-# Step 2: Check if gfortran is installed
+# Step 2: Check and install gfortran if needed
 print_info "Checking for Fortran compiler..."
 if ! command -v gfortran &> /dev/null; then
     print_warning "gfortran not found!"
-    print_info "Installing gfortran via brew (macOS)..."
-    if command -v brew &> /dev/null; then
-        brew install gcc
+    echo ""
+    read -p "Do you want to install gfortran? (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        print_info "Installing gfortran..."
+
+        # Initialize conda if not already done
+        if ! command -v conda &> /dev/null; then
+            source "$HOME/miniconda3/etc/profile.d/conda.sh"
+        fi
+
+        # Install gfortran via conda
+        print_info "Installing gfortran via conda-forge..."
+        conda install -y -c conda-forge gfortran
+
+        print_success "gfortran installed successfully!"
     else
-        print_error "Please install gfortran manually or install Homebrew first."
+        print_error "gfortran is required to compile SMOOTHIE. Exiting."
         exit 1
     fi
+else
+    print_success "Fortran compiler found: $(gfortran --version | head -n 1)"
 fi
-print_success "Fortran compiler found: $(gfortran --version | head -n 1)"
 echo ""
 
-# Step 3: Create or update conda environment
+# Step 3: Check and install LAPACK if needed
+print_info "Checking for LAPACK libraries..."
+LAPACK_FOUND=false
+LAPACK_SOURCE=""
+
+# Check for LAPACK in common locations
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: Check multiple sources in order of preference
+
+    # 1. Check Homebrew installation
+    if [ -d "/opt/homebrew/opt/lapack" ] && [ -f "/opt/homebrew/opt/lapack/lib/liblapack.dylib" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="Homebrew (/opt/homebrew/opt/lapack)"
+    elif [ -d "/usr/local/opt/lapack" ] && [ -f "/usr/local/opt/lapack/lib/liblapack.dylib" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="Homebrew (/usr/local/opt/lapack)"
+    # 2. Check MacPorts installation
+    elif [ -f "/opt/local/lib/liblapack.dylib" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="MacPorts (/opt/local/lib)"
+    # 3. Check Accelerate framework
+    elif [ -f "/System/Library/Frameworks/Accelerate.framework/Accelerate" ] || \
+         [ -f "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework/Accelerate" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="macOS Accelerate framework"
+    fi
+
+    if [ "$LAPACK_FOUND" = true ]; then
+        print_success "LAPACK found (via $LAPACK_SOURCE)"
+    fi
+else
+    # Linux: check for liblapack
+    if ldconfig -p 2>/dev/null | grep -q liblapack; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="system ldconfig"
+        print_success "LAPACK found (via $LAPACK_SOURCE)"
+    elif [ -f "/usr/lib/liblapack.so" ] || \
+         [ -f "/usr/lib64/liblapack.so" ] || \
+         [ -f "/usr/lib/x86_64-linux-gnu/liblapack.so" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="system libraries"
+        print_success "LAPACK found (via $LAPACK_SOURCE)"
+    fi
+fi
+
+# If not found, offer to install via conda
+if [ "$LAPACK_FOUND" = false ]; then
+    print_warning "LAPACK libraries not found!"
+    echo ""
+    read -p "Do you want to install LAPACK via conda? (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        print_info "Installing LAPACK..."
+
+        # Initialize conda if not already done
+        if ! command -v conda &> /dev/null; then
+            source "$HOME/miniconda3/etc/profile.d/conda.sh"
+        fi
+
+        # Install LAPACK and BLAS via conda
+        print_info "Installing LAPACK/BLAS via conda-forge..."
+        conda install -y -c conda-forge openblas lapack
+
+        print_success "LAPACK installed successfully!"
+    else
+        print_warning "LAPACK is required for optimal performance. Continuing anyway..."
+        print_info "You may need to install LAPACK manually later."
+    fi
+fi
+echo ""
+
+# Step 4: Create or update conda environment
 ENV_NAME="smoothie_gui"
 print_info "Setting up conda environment: $ENV_NAME"
 
@@ -90,7 +218,7 @@ fi
 print_success "Conda environment ready"
 echo ""
 
-# Step 4: Activate environment and install Python packages
+# Step 5: Activate environment and install Python packages
 print_info "Installing Python dependencies..."
 
 # Get conda base path
@@ -105,7 +233,7 @@ pip install -r requirements.txt
 print_success "Python dependencies installed"
 echo ""
 
-# Step 5: Build SMOOTHIE
+# Step 6: Build SMOOTHIE
 print_info "Building SMOOTHIE Fortran code..."
 cd "$SCRIPT_DIR"
 
@@ -120,6 +248,70 @@ if [ ! -f "make.inc" ]; then
         exit 1
     fi
 fi
+
+# Update make.inc with correct LAPACK paths
+print_info "Configuring make.inc for your system..."
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: Configure based on detected LAPACK source
+    # Check if Accelerate framework is available
+    ACCELERATE_AVAILABLE=false
+    if [ -d "/System/Library/Frameworks/Accelerate.framework" ]; then
+        ACCELERATE_AVAILABLE=true
+    fi
+
+    if [[ "$LAPACK_SOURCE" == *"Homebrew"* ]]; then
+        # Homebrew LAPACK detected
+        if [ -d "/opt/homebrew/opt/lapack" ]; then
+            LAPACK_PATH="/opt/homebrew/opt/lapack/lib"
+        else
+            LAPACK_PATH="/usr/local/opt/lapack/lib"
+        fi
+
+        # On macOS, Accelerate framework is highly optimized by Apple
+        # Give user choice between Homebrew LAPACK and Accelerate
+        if [ "$ACCELERATE_AVAILABLE" = true ]; then
+            print_info "Both Homebrew LAPACK and Accelerate framework are available"
+            print_info "Accelerate framework is Apple's optimized implementation"
+            print_info "Using Accelerate framework (recommended for macOS)"
+            LAPACK_LIB="-framework Accelerate"
+        else
+            LAPACK_LIB="-L$LAPACK_PATH -llapack -lblas"
+        fi
+    elif [[ "$LAPACK_SOURCE" == *"MacPorts"* ]]; then
+        # MacPorts LAPACK detected
+        if [ "$ACCELERATE_AVAILABLE" = true ]; then
+            print_info "Both MacPorts LAPACK and Accelerate framework are available"
+            print_info "Using Accelerate framework (recommended for macOS)"
+            LAPACK_LIB="-framework Accelerate"
+        else
+            LAPACK_LIB="-L/opt/local/lib -llapack"
+        fi
+    elif [ "$ACCELERATE_AVAILABLE" = true ]; then
+        # Use Accelerate framework only
+        LAPACK_LIB="-framework Accelerate"
+        print_info "Using macOS Accelerate framework"
+    else
+        print_warning "No LAPACK library found on macOS"
+        LAPACK_LIB=""
+    fi
+else
+    # Linux: Check for conda-installed LAPACK first
+    CONDA_BASE=$(conda info --base 2>/dev/null)
+    if [ -n "$CONDA_BASE" ] && [ -f "$CONDA_BASE/lib/libopenblas.so" ]; then
+        LAPACK_LIB="-L$CONDA_BASE/lib -lopenblas -llapack"
+    elif [ -f "/usr/lib/liblapack.so" ] || [ -f "/usr/lib64/liblapack.so" ]; then
+        LAPACK_LIB="-llapack -lblas"
+    elif [ -f "/usr/lib/x86_64-linux-gnu/liblapack.so" ]; then
+        LAPACK_LIB="-llapack -lblas"
+    else
+        LAPACK_LIB="-llapack"
+    fi
+fi
+
+# Update LIBSTD1 in make.inc
+sed -i.bak "s|^LIBSTD1 =.*|LIBSTD1 = $LAPACK_LIB|" make.inc
+print_success "Updated make.inc with LAPACK configuration: $LAPACK_LIB"
 
 # Build general modules
 print_info "Building general modules..."
@@ -161,7 +353,7 @@ cd "$SCRIPT_DIR"
 print_success "SMOOTHIE compiled successfully"
 echo ""
 
-# Step 6: Create launcher script
+# Step 7: Create launcher script
 print_info "Creating launcher script..."
 cat > run_smoothie_gui.sh << 'EOF'
 #!/bin/bash
@@ -190,7 +382,7 @@ chmod +x run_smoothie_gui.sh
 print_success "Launcher script created: run_smoothie_gui.sh"
 echo ""
 
-# Step 7: Print completion message
+# Step 8: Print completion message
 echo "=================================================="
 print_success "Setup completed successfully!"
 echo "=================================================="

@@ -343,6 +343,64 @@ QFormLayout QLabel {
     color: #343a40;
     padding-right: 8px;
 }
+
+/* Run Button - Green */
+QToolButton#runButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #34C759, stop:1 #28A745);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 60px;
+}
+
+QToolButton#runButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #40D66F, stop:1 #30B956);
+}
+
+QToolButton#runButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #28A745, stop:1 #1E7E34);
+    padding: 9px 15px 7px 17px;
+}
+
+QToolButton#runButton:disabled {
+    background: #dee2e6;
+    color: #adb5bd;
+}
+
+/* Stop Button - Red */
+QToolButton#stopButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #FF3B30, stop:1 #DC3545);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 60px;
+}
+
+QToolButton#stopButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #FF5247, stop:1 #E94A5A);
+}
+
+QToolButton#stopButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #DC3545, stop:1 #BD2130);
+    padding: 9px 15px 7px 17px;
+}
+
+QToolButton#stopButton:disabled {
+    background: #dee2e6;
+    color: #adb5bd;
+}
 """
 
 DARK_THEME = """
@@ -685,6 +743,64 @@ QFormLayout QLabel {
     font-weight: 600;
     color: #f3f4f6;
     padding-right: 8px;
+}
+
+/* Run Button - Green (Dark Theme) */
+QToolButton#runButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #32D74B, stop:1 #28A745);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 60px;
+}
+
+QToolButton#runButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #3FE65B, stop:1 #32D74B);
+}
+
+QToolButton#runButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #28A745, stop:1 #1E7E34);
+    padding: 9px 15px 7px 17px;
+}
+
+QToolButton#runButton:disabled {
+    background: #374151;
+    color: #6b7280;
+}
+
+/* Stop Button - Red (Dark Theme) */
+QToolButton#stopButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #FF453A, stop:1 #DC3545);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    min-width: 60px;
+}
+
+QToolButton#stopButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #FF6159, stop:1 #E94A5A);
+}
+
+QToolButton#stopButton:pressed {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #DC3545, stop:1 #BD2130);
+    padding: 9px 15px 7px 17px;
+}
+
+QToolButton#stopButton:disabled {
+    background: #374151;
+    color: #6b7280;
 }
 """
 

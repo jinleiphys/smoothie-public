@@ -4,7 +4,7 @@
 
 # macbook pro
 
-LIBSTD1 = -L /usr/lib/x86_64-linux-gnu/ -llapack 
+LIBSTD1 = -framework Accelerate
 #LIBSTD1 = -L /home/moro/cloud/THO/thox/v2.5/lapack64/ -llapack 
 #LIBSTD2 = -lhdf5_hl -lhdf5hl_fortran -lhdf5 -lhdf5_fortran -lz
 LIBSTD3 =

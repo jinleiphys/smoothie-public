@@ -4,7 +4,7 @@ Main window for SMOOTHIE GUI application
 
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QSplitter,
-    QTabWidget, QToolBar, QStatusBar, QFileDialog, QMessageBox
+    QTabWidget, QToolBar, QStatusBar, QFileDialog, QMessageBox, QToolButton
 )
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QAction, QIcon, QKeySequence
@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("SMOOTHIE - IAV nonelastic breakup calculations")
         self.setGeometry(100, 100, 1600, 900)
 
-        # Apply modern styling
+        # Apply modern styling (default: light theme, change to "dark" for dark theme)
         apply_modern_style(self)
 
         # Create central widget with splitter layout FIRST
@@ -189,18 +189,34 @@ class MainWindow(QMainWindow):
 
         toolbar.addSeparator()
 
-        # Run SMOOTHIE
+        # Run SMOOTHIE - Create as QToolButton with custom styling
+        run_tool_btn = QToolButton()
+        run_tool_btn.setText("Run")
+        run_tool_btn.setToolTip("Run SMOOTHIE calculation (Ctrl+R)")
+        run_tool_btn.setObjectName("runButton")
+        run_tool_btn.clicked.connect(self.run_smoothie)
+        toolbar.addWidget(run_tool_btn)
+        self.run_btn_widget = run_tool_btn
+
+        # Stop SMOOTHIE - Create as QToolButton with custom styling
+        stop_tool_btn = QToolButton()
+        stop_tool_btn.setText("Stop")
+        stop_tool_btn.setToolTip("Stop running calculation (Ctrl+.)")
+        stop_tool_btn.setObjectName("stopButton")
+        stop_tool_btn.setEnabled(False)
+        stop_tool_btn.clicked.connect(self.stop_smoothie)
+        toolbar.addWidget(stop_tool_btn)
+        self.stop_btn_widget = stop_tool_btn
+
+        # Keep QAction references for menu
         self.run_btn = QAction("Run", self)
         self.run_btn.setToolTip("Run SMOOTHIE calculation (Ctrl+R)")
         self.run_btn.triggered.connect(self.run_smoothie)
-        toolbar.addAction(self.run_btn)
 
-        # Stop SMOOTHIE
         self.stop_btn = QAction("Stop", self)
         self.stop_btn.setToolTip("Stop running calculation (Ctrl+.)")
         self.stop_btn.setEnabled(False)
         self.stop_btn.triggered.connect(self.stop_smoothie)
-        toolbar.addAction(self.stop_btn)
 
     def setup_connections(self):
         """Setup signal-slot connections"""
@@ -424,16 +440,20 @@ class MainWindow(QMainWindow):
         """Handle calculation start"""
         self.run_action.setEnabled(False)
         self.run_btn.setEnabled(False)
+        self.run_btn_widget.setEnabled(False)
         self.stop_action.setEnabled(True)
         self.stop_btn.setEnabled(True)
+        self.stop_btn_widget.setEnabled(True)
         self.status_bar.showMessage("Running SMOOTHIE...")
 
     def on_calculation_finished(self, exit_code):
         """Handle calculation completion"""
         self.run_action.setEnabled(True)
         self.run_btn.setEnabled(True)
+        self.run_btn_widget.setEnabled(True)
         self.stop_action.setEnabled(False)
         self.stop_btn.setEnabled(False)
+        self.stop_btn_widget.setEnabled(False)
 
         if exit_code == 0:
             if self.is_running_smoothie:
