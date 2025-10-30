@@ -232,19 +232,24 @@ print_info "Using pip: $(which pip)"
 print_info "Python version: $(python --version)"
 
 # Check if pip is from conda environment (critical check!)
-PYTHON_PATH=$(which python)
 PIP_PATH=$(which pip)
-EXPECTED_PIP="$(dirname $PYTHON_PATH)/pip"
 
-if [ "$PIP_PATH" != "$EXPECTED_PIP" ]; then
-    print_warning "pip is not from the conda environment!"
-    print_warning "  Expected pip: $EXPECTED_PIP"
-    print_warning "  Actual pip: $PIP_PATH"
-    print_info "Using 'python -m pip' instead to ensure correct environment"
-    PIP_CMD="python -m pip"
+# Smart detection: Check if pip is from the active conda environment
+if [ -n "$CONDA_PREFIX" ]; then
+    # If pip path contains the conda environment prefix, it's the correct pip
+    if [[ "$PIP_PATH" == "$CONDA_PREFIX"* ]]; then
+        print_success "pip is correctly from conda environment"
+        PIP_CMD="pip"
+    else
+        print_warning "pip is NOT from the conda environment!"
+        print_warning "  Conda environment: $CONDA_PREFIX"
+        print_warning "  pip location: $PIP_PATH"
+        print_info "Using 'python -m pip' instead to ensure correct environment"
+        PIP_CMD="python -m pip"
+    fi
 else
-    print_success "pip is correctly from conda environment"
-    PIP_CMD="pip"
+    print_warning "CONDA_PREFIX not set, using 'python -m pip' for safety"
+    PIP_CMD="python -m pip"
 fi
 
 # Install requirements
