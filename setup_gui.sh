@@ -226,9 +226,61 @@ CONDA_BASE=$(conda info --base)
 source "$CONDA_BASE/etc/profile.d/conda.sh"
 conda activate $ENV_NAME
 
+# Verify we're using the correct Python and pip
+print_info "Using Python: $(which python)"
+print_info "Using pip: $(which pip)"
+print_info "Python version: $(python --version)"
+
 # Install requirements
 cd smoothie_gui
+
+# Upgrade pip first to avoid installation issues
+print_info "Upgrading pip..."
+pip install --upgrade pip
+
+print_info "Installing requirements from requirements.txt..."
 pip install -r requirements.txt
+
+# Verify PySide6 installation
+print_info "Verifying PySide6 installation..."
+if python -c "import PySide6.QtWidgets; print('PySide6 version:', PySide6.__version__)" 2>/dev/null; then
+    print_success "PySide6 installed and verified successfully"
+else
+    print_warning "PySide6 installation verification failed!"
+    print_info "Attempting to reinstall PySide6 with verbose output..."
+
+    # Try installing with verbose output to see what's wrong
+    pip install --upgrade --force-reinstall --verbose PySide6>=6.5.0
+
+    # Try again
+    if python -c "import PySide6.QtWidgets; print('PySide6 version:', PySide6.__version__)" 2>/dev/null; then
+        print_success "PySide6 reinstalled successfully"
+    else
+        print_error "Failed to install PySide6!"
+        print_info "Diagnostic information:"
+        echo "  Python executable: $(which python)"
+        echo "  pip executable: $(which pip)"
+        echo "  Python site-packages:"
+        python -c "import site; print('  ', site.getsitepackages())"
+        echo ""
+        print_info "Trying alternative installation methods..."
+
+        # Try conda installation as fallback
+        print_info "Attempting conda installation of PySide6..."
+        conda install -y -c conda-forge pyside6
+
+        if python -c "import PySide6.QtWidgets" 2>/dev/null; then
+            print_success "PySide6 installed via conda successfully"
+        else
+            print_error "All installation methods failed. Please try manually:"
+            echo "  conda activate smoothie_gui"
+            echo "  pip install --upgrade pip"
+            echo "  pip install PySide6"
+            echo "  # OR try: conda install -c conda-forge pyside6"
+            exit 1
+        fi
+    fi
+fi
 
 print_success "Python dependencies installed"
 echo ""
@@ -389,13 +441,17 @@ echo "=================================================="
 echo ""
 echo "To run SMOOTHIE GUI:"
 echo ""
-echo "  Option 1 (Quick launch):"
+echo -e "  ${BLUE}Recommended - Use the launcher script:${NC}"
 echo -e "    ${GREEN}./run_smoothie_gui.sh${NC}"
 echo ""
-echo "  Option 2 (Manual):"
+echo -e "  ${BLUE}Alternative - Manual launch:${NC}"
 echo -e "    ${GREEN}conda activate $ENV_NAME${NC}"
 echo -e "    ${GREEN}cd smoothie_gui${NC}"
 echo -e "    ${GREEN}python main.py${NC}"
+echo ""
+print_warning "IMPORTANT: You MUST activate the conda environment before running!"
+echo -e "  ${RED}DON'T run:${NC} python main.py  (without activating environment)"
+echo -e "  ${GREEN}DO run:${NC}    conda activate smoothie_gui && cd smoothie_gui && python main.py"
 echo ""
 print_info "The GUI provides:"
 echo "  - Parameter input forms with validation"
