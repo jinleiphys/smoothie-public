@@ -367,7 +367,7 @@ c *** Print physical constants
 c *** Print reaction system
       write(*,40) namep,namet,nameb,namex,namet,nameb,namex,namet,nameb
 40    format('Assuming the reaction has the form:',/,T5,A5,'+  ',A5,
-     &         '-->  ',A5,'+  ',A5,"+  ",A5,'-->  'A5,'+  (',A5,'+  'A5,
+     &         '-->  ',A5,'+  ',A5,"+  ",A5,'-->  ',A5,'+  (',A5,'+  ',A5,
      &         ')-->  ',A5,'+ anything' )
 c ***print parameters
 

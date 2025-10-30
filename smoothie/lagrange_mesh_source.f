@@ -21,21 +21,22 @@ c wg(1:ng)= weigths
       g(1:ng)=1/sqrt(rmax*rg(1:ng)*(1-rg(1:ng)))
       g(1:ng:2)=-g(1:ng:2) ! used for the (-1)^n factor
 
-      do 1 i=1,ng
-      ui=rg(i)
-      do 1 j=1,ng
-      uj=rg(j)
-      if(i.eq.j)then
-       t=4*ng*(ng+1)+3+(1-6*ui)/ui/(1-ui)
-       t=t/(3*ui*(1-ui))   ! compute <fn|T+Lc(0)|fn> without hbarc^2 / (2 mu a^2 )
-      else
-       t=ng*(ng+1)+1+(ui+uj-2*ui*uj)/(ui-uj)**2
-       t=t-1/(1-ui)-1/(1-uj)
-       t=t/sqrt(ui*uj*(1-ui)*(1-uj))
-       if(mod(i+j,2).ne.0)t=-t   ! compute <fn |T+Lc(0)|fn' > without hbarc^2 / (2 mu a^2 )
-      end if
-      tc(i,j)=t/rmax**2   ! <fn |T+Lc(0)| fn'> without hbarc^2 / (2 mu ) factor
-    1 continue
+      do i=1,ng
+        ui=rg(i)
+        do j=1,ng
+          uj=rg(j)
+          if(i.eq.j)then
+           t=4*ng*(ng+1)+3+(1-6*ui)/ui/(1-ui)
+           t=t/(3*ui*(1-ui))   ! compute <fn|T+Lc(0)|fn> without hbarc^2 / (2 mu a^2 )
+          else
+           t=ng*(ng+1)+1+(ui+uj-2*ui*uj)/(ui-uj)**2
+           t=t-1/(1-ui)-1/(1-uj)
+           t=t/sqrt(ui*uj*(1-ui)*(1-uj))
+           if(mod(i+j,2).ne.0)t=-t   ! compute <fn |T+Lc(0)|fn' > without hbarc^2 / (2 mu a^2 )
+          end if
+          tc(i,j)=t/rmax**2   ! <fn |T+Lc(0)| fn'> without hbarc^2 / (2 mu ) factor
+        end do
+      end do
       return
       end SUBROUTINE
 
@@ -140,32 +141,36 @@ C Downloaded from http://jin.ece.illinois.edu/routines/routines.html
            z=cos(pi*(nr-0.25d0)/(n+0.5d0))
 10         z0=z
            p=1
-           do 15 i=1,nr-1
-15            p=p*(z-x(i))
+           do i=1,nr-1
+              p=p*(z-x(i))
+           end do
            f0=1
            if (nr.eq.n0.and.n.ne.2*int(n/2)) z=0
            f1=z
-           do 20 k=2,n
+           do k=2,n
               pf=(2-one/k)*z*f1-(1-one/k)*f0
               pd=k*(f1-z*pf)/(1-z*z)
               f0=f1
-20            f1=pf
+              f1=pf
+           end do
            if (z.eq.0) go to 40
            fd=pf/p
            q=0
-           do 35 i=1,nr-1
+           do i=1,nr-1
               wp=1
-              do 30 j=1,nr-1
+              do j=1,nr-1
                  if (j.ne.i) wp=wp*(z-x(j))
-30            continue
-35            q=q+wp
+              end do
+              q=q+wp
+           end do
            gd=(pd-q*fd)/p
            z=z-fd/gd
            if (abs(z-z0).gt.abs(z)*1.0d-15) go to 10
 40         x(nr)=z
            x(n+1-nr)=-z
            w(nr)=2/((1-z*z)*pd*pd)
-45         w(n+1-nr)=w(nr)
+           w(n+1-nr)=w(nr)
+45      continue
         x(1:n)=(1+x(n:1:-1))/2
         w(1:n)=w(n:1:-1)/2
         return
@@ -255,7 +260,8 @@ C*** RECURRENCE ARRIERE POUR F ET FP ; GC,GCP UTILISES POUR STOCKAGE ***
       GCP(L+1) = SQRT(ETA2+PL*PL)/PL
       FC(L) =(GC(L+1)*FC(L+1)+FCP(L+1))/GCP(L+1)
       FCP(L) = GC(L+1)*FC(L)-GCP(L+1)*FC(L+1)
-    4 L = L-1
+      L = L-1
+    4 continue
       F = FC(LMIN1)
       FP = FCP(LMIN1)
     5 IF(KTRP.EQ.-1) GO TO 1
@@ -343,7 +349,8 @@ C*** RENORMALISATION DE FC ET FCP POUR CHAQUE VALEUR DE L **************
       GC(L+1) = (GC(L)*GC(L+1)-GCP(L))/GCP(L+1)
       GCP(L+1) = GC(L)*GCP(L+1)-GC(L+1)*T
       FC(L+1) = W*FC(L+1)
-    9 FCP(L+1) = W*FCP(L+1)
+      FCP(L+1) = W*FCP(L+1)
+    9 continue
       FC(LMIN1) = W*FC(LMIN1)
       FCP(LMIN1) = W*FCP(LMIN1)
       RETURN

@@ -237,7 +237,7 @@ c      Normalization
 c****
       write(*,99)uv,n*uv,n
 99    format(2x,"Adjust potential depth from ",F8.3," to ",F8.3,
-     +                  " with scaling factor " F7.3)
+     +                  " with scaling factor ",F7.3)
 
        anc=phi_bx(irmatch,nch)/fff
        write(*,'(" ANC=",1f10.5)') anc
@@ -568,8 +568,9 @@ c-----------------------------------------------------------------------
       REAL*8 fdis(ndm),y1,y2,y3,y4
       DIMENSION xv(ndm)
       IF(r.GT.xv(ndm)) go to 9
-      DO 5 k=1,ndm-2
- 5    IF(r.LT.xv(k)) go to 6
+      DO k=1,ndm-2
+        IF(r.LT.xv(k)) go to 6
+      END DO
       k=ndm-2
  6    nst=MAX(k-1,1)
       x1=xv(nst)
