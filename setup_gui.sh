@@ -231,15 +231,31 @@ print_info "Using Python: $(which python)"
 print_info "Using pip: $(which pip)"
 print_info "Python version: $(python --version)"
 
+# Check if pip is from conda environment (critical check!)
+PYTHON_PATH=$(which python)
+PIP_PATH=$(which pip)
+EXPECTED_PIP="$(dirname $PYTHON_PATH)/pip"
+
+if [ "$PIP_PATH" != "$EXPECTED_PIP" ]; then
+    print_warning "pip is not from the conda environment!"
+    print_warning "  Expected pip: $EXPECTED_PIP"
+    print_warning "  Actual pip: $PIP_PATH"
+    print_info "Using 'python -m pip' instead to ensure correct environment"
+    PIP_CMD="python -m pip"
+else
+    print_success "pip is correctly from conda environment"
+    PIP_CMD="pip"
+fi
+
 # Install requirements
 cd smoothie_gui
 
 # Upgrade pip first to avoid installation issues
 print_info "Upgrading pip..."
-pip install --upgrade pip
+$PIP_CMD install --upgrade pip
 
 print_info "Installing requirements from requirements.txt..."
-pip install -r requirements.txt
+$PIP_CMD install -r requirements.txt
 
 # Verify PySide6 installation
 print_info "Verifying PySide6 installation..."
@@ -250,7 +266,7 @@ else
     print_info "Attempting to reinstall PySide6 with verbose output..."
 
     # Try installing with verbose output to see what's wrong
-    pip install --upgrade --force-reinstall --verbose PySide6>=6.5.0
+    $PIP_CMD install --upgrade --force-reinstall --verbose PySide6>=6.5.0
 
     # Try again
     if python -c "import PySide6.QtWidgets; print('PySide6 version:', PySide6.__version__)" 2>/dev/null; then

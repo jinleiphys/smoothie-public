@@ -36,6 +36,22 @@ echo "  Conda environment: $(conda info --envs | grep '*' | awk '{print $1}')"
 echo "  Python executable: $(which python)"
 echo "  Python version: $(python --version)"
 echo "  pip executable: $(which pip)"
+
+# Check if pip is from conda environment
+PYTHON_PATH=$(which python)
+PIP_PATH=$(which pip)
+EXPECTED_PIP="$(dirname $PYTHON_PATH)/pip"
+
+if [ "$PIP_PATH" != "$EXPECTED_PIP" ]; then
+    echo -e "${YELLOW}[WARNING]${NC} pip is NOT from the conda environment!"
+    echo "  Expected pip: $EXPECTED_PIP"
+    echo "  Actual pip: $PIP_PATH"
+    echo -e "${BLUE}[INFO]${NC} Using 'python -m pip' to ensure correct environment"
+    PIP_CMD="python -m pip"
+else
+    echo -e "${GREEN}[SUCCESS]${NC} pip is correctly from conda environment"
+    PIP_CMD="pip"
+fi
 echo ""
 
 # Check if PySide6 is already installed
@@ -54,8 +70,8 @@ echo ""
 
 # Method 1: Upgrade pip and install via pip
 echo -e "${BLUE}[INFO]${NC} Method 1: Installing PySide6 via pip..."
-pip install --upgrade pip
-pip install --upgrade --force-reinstall PySide6>=6.5.0
+$PIP_CMD install --upgrade pip
+$PIP_CMD install --upgrade --force-reinstall PySide6>=6.5.0
 
 if python -c "import PySide6.QtWidgets" 2>/dev/null; then
     echo -e "${GREEN}[SUCCESS]${NC} PySide6 installed successfully via pip!"
@@ -93,17 +109,21 @@ echo "     conda activate smoothie_gui"
 echo "     which python"
 echo "     which pip"
 echo ""
-echo "  2. Try installing dependencies manually:"
-echo "     pip install --upgrade pip setuptools wheel"
-echo "     pip install PySide6"
+echo "  2. IMPORTANT: Make sure pip is from conda environment!"
+echo "     If 'which pip' shows /opt/homebrew/bin/pip or /usr/local/bin/pip,"
+echo "     use 'python -m pip' instead of 'pip' in all commands below:"
 echo ""
-echo "  3. If on macOS, you may need Xcode Command Line Tools:"
+echo "  3. Try installing dependencies manually:"
+echo "     python -m pip install --upgrade pip setuptools wheel"
+echo "     python -m pip install PySide6"
+echo ""
+echo "  4. If on macOS, you may need Xcode Command Line Tools:"
 echo "     xcode-select --install"
 echo ""
-echo "  4. Check Python packages:"
-echo "     pip list | grep -i pyside"
+echo "  5. Check Python packages:"
+echo "     python -m pip list | grep -i pyside"
 echo ""
-echo "  5. Try recreating the environment:"
+echo "  6. Try recreating the environment:"
 echo "     conda deactivate"
 echo "     conda env remove -n smoothie_gui"
 echo "     ./setup_gui.sh"
