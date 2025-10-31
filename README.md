@@ -77,11 +77,20 @@ SMOOTHIE includes a modern graphical user interface that provides an intuitive w
 
 The automated setup script handles all dependencies and configuration:
 
+**Linux / macOS:**
 ```bash
 # Run the setup script
 chmod +x setup_gui.sh
 ./setup_gui.sh
 ```
+
+**Windows:**
+```powershell
+# Run in PowerShell (as Administrator recommended)
+.\setup_gui.ps1
+```
+
+> **Note for Windows users**: For the best experience, we recommend using WSL (Windows Subsystem for Linux) to run the bash setup script. Native Windows compilation requires additional tools (make, gfortran) which can be complex to set up.
 
 The script will automatically:
 1. ✅ Install conda (Miniconda) if not present
@@ -94,12 +103,18 @@ The script will automatically:
 
 ### Running the GUI
 
-**Recommended method** - Use the launcher script:
+**Linux / macOS - Recommended method:**
 ```bash
 ./run_smoothie_gui.sh
 ```
 
-**Alternative method** - Manual launch:
+**Windows - Recommended method:**
+```cmd
+run_smoothie_gui.bat
+```
+(Or double-click the `run_smoothie_gui.bat` file)
+
+**Alternative method (all platforms):**
 ```bash
 conda activate smoothie_gui
 cd smoothie_gui
