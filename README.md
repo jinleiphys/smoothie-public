@@ -134,8 +134,7 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 
 ### 🔧 &GLOBAL - Global Parameters
 
-<details>
-<summary><strong>Basic Settings</strong></summary>
+**Basic Settings**
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
@@ -146,10 +145,7 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 | `lxmax` | Maximum lₓ for x+A channel | lmax |
 | `elab` | Laboratory energy (MeV) of projectile "a" | - |
 
-</details>
-
-<details>
-<summary><strong>Angular Distribution</strong></summary>
+**Angular Distribution**
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
@@ -157,10 +153,7 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 | `thinc` | Angular increment (degrees) for output | - |
 | `nx` | Gaussian quadrature points for angular integration | 34 |
 
-</details>
-
-<details>
-<summary><strong>DWBA Methods</strong></summary>
+**DWBA Methods**
 
 | Value | Description |
 |-------|-------------|
@@ -170,12 +163,9 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 | `dwba=4` | Enhanced method with Lagrange mesh |
 | `dwba=5` | Lagrange mesh with rb variable |
 
-</details>
-
 ### 🎯 &SYSTEM - System Parameters
 
-<details>
-<summary><strong>Particle Properties</strong></summary>
+**Particle Properties**
 
 | Parameter | Description |
 |-----------|-------------|
@@ -184,10 +174,7 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 | `zp`, `zt`, `zb`, `zx` | Charges of each particle |
 | `jp`, `jt`, `jb`, `jx` | Spins of each particle |
 
-</details>
-
-<details>
-<summary><strong>Bound State Properties</strong></summary>
+**Bound State Properties**
 
 | Parameter | Description |
 |-----------|-------------|
@@ -195,8 +182,6 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 | `sbx` | Total spin coupling (jb + jx) for detected and undetected particles |
 | `nodes` | Number of nodes in the b-x bound state wave function |
 | `be` | Binding energy (MeV) of the b-x system (positive value) |
-
-</details>
 
 ### 📊 &OUTGOING - Output Energy Parameters
 
@@ -208,8 +193,7 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 
 ### ⚛️ &POTENTIAL - Optical Potentials
 
-<details>
-<summary><strong>System Identification (kp1)</strong></summary>
+**System Identification (kp1)**
 
 | Value | Description |
 |-------|-------------|
@@ -219,10 +203,7 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 | `'x'` | Undetected + target (x+A) channel |
 | `'p'` | Detected + undetected (b+x) bound state |
 
-</details>
-
-<details>
-<summary><strong>Potential Models (ptype)</strong></summary>
+**Potential Models (ptype)**
 
 | Value | Description |
 |-------|-------------|
@@ -231,8 +212,6 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 | `3` | Koning-Delaroche (KD02) nucleon-nucleus global potential |
 | `4` | CH89 nucleon-nucleus global potential |
 | `41-44` | Read potential from external files (fort.41 to fort.44) |
-
-</details>
 
 ## 🔨 Compilation and Installation
 
@@ -259,16 +238,15 @@ SMOOTHIE uses Fortran namelist format with the following main sections:
 
 This example demonstrates a deuteron breakup reaction on ⁹³Nb target, analyzing the (d,p) channel.
 
-<details>
-<summary><strong>View Input File</strong></summary>
+**Input File:**
 
 ```fortran
 NAMELIST
-&GLOBAL      hcm=0.05  lmax=25  elab=25.5 thmin=0. thmax=180.  printf=f dwba=1  
+&GLOBAL      hcm=0.05  lmax=25  elab=25.5 thmin=0. thmax=180.  printf=f dwba=1
              thinc=1   nx=34 rmax=50   nr=100  lxmax=12  /
 &SYSTEM     namep='d'     massp=2.       zp=1.0    jp=0. sbx=0.
             namet='93Nb'  masst=93.0     zt=41.0   jt=0.0  be=2.224
-            nameb='p'     massb=1.0078        zb=1.0    jb=0.   
+            nameb='p'     massb=1.0078        zb=1.0    jb=0.
             namex='n'     massx=1.0087   zx=0.0    jx=0.  lbx=0    nodes=1  /
 &OUTGOING   ecmbmin=2 ecmbmax=30 ecmbh=1  /
 &OUTGOING /
@@ -288,8 +266,6 @@ NAMELIST
            /
 &POTENTIAL /
 ```
-
-</details>
 
 **Key Parameters:**
 - 🎯 **Incident Energy**: 25.5 MeV deuteron beam
