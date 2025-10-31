@@ -24,12 +24,29 @@ a(=b+x) + A → b + B*, where B* = (x+A)**
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Option 1: GUI Setup (Recommended for New Users)
+
+Run the automated setup script for a complete GUI environment:
+
+```bash
+# One-command setup
+chmod +x setup_gui.sh
+./setup_gui.sh
+
+# Launch the GUI
+./run_smoothie_gui.sh
+```
+
+The GUI provides an intuitive interface with forms, real-time plotting, and output monitoring. See the [GUI section](#-graphical-user-interface-gui) below for details.
+
+### Option 2: Command-Line Installation
+
+**Prerequisites:**
 - **Modern Fortran** compiler (gfortran, ifort, etc.)
 - **Make** build system
 - **LAPACK/BLAS** libraries (recommended)
 
-### Installation
+**Installation:**
 ```bash
 # 1. Configure build environment
 vim make.inc
@@ -42,6 +59,74 @@ make
 cd test/
 ./smoothie < test.in
 ```
+
+## 🖥️ Graphical User Interface (GUI)
+
+SMOOTHIE includes a modern graphical user interface that provides an intuitive way to set up calculations, monitor progress, and visualize results in real-time.
+
+### GUI Features
+
+- **📝 Form-Based Input**: Organized parameter entry with tabs for Global, System, Outgoing, and Potential settings
+- **📊 Real-Time Plotting**: Automatic visualization of calculation results with multiple plot types
+- **📟 Output Monitoring**: Color-coded log display with live SMOOTHIE output
+- **🎨 Modern Design**: Beautiful, responsive interface with light and dark theme support
+- **💾 File Operations**: Load/save input files, load examples, export results
+- **⚡ Integrated Execution**: Run SMOOTHIE directly from the GUI with real-time feedback
+
+### Quick GUI Setup
+
+The automated setup script handles all dependencies and configuration:
+
+```bash
+# Run the setup script
+chmod +x setup_gui.sh
+./setup_gui.sh
+```
+
+The script will automatically:
+1. ✅ Install conda (Miniconda) if not present
+2. ✅ Install gfortran compiler if needed
+3. ✅ Detect and configure LAPACK/BLAS libraries
+4. ✅ Create `smoothie_gui` conda environment
+5. ✅ Install Python dependencies (PySide6, matplotlib, numpy)
+6. ✅ Build SMOOTHIE Fortran code with optimized settings
+7. ✅ Create a launcher script (`run_smoothie_gui.sh`)
+
+### Running the GUI
+
+**Recommended method** - Use the launcher script:
+```bash
+./run_smoothie_gui.sh
+```
+
+**Alternative method** - Manual launch:
+```bash
+conda activate smoothie_gui
+cd smoothie_gui
+python main.py
+```
+
+### Using the GUI
+
+1. **Input Parameters**: Navigate tabs to enter calculation parameters or load an example
+2. **Run Calculation**: Click "Run" button (Ctrl+R) and monitor progress in the Output Log
+3. **View Results**: Results automatically appear in the Plot tab when complete
+4. **Save/Load**: Use File menu or shortcuts (Ctrl+S to save, Ctrl+O to open)
+
+### GUI Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+N` | New file |
+| `Ctrl+O` | Open file |
+| `Ctrl+S` | Save file |
+| `Ctrl+R` | Run SMOOTHIE |
+| `Ctrl+.` | Stop calculation |
+| `Ctrl+Q` | Quit application |
+
+For detailed GUI documentation, see [`smoothie_gui/README.md`](smoothie_gui/README.md).
+
+---
 
 ## 📋 Input File Structure
 
