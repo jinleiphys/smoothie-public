@@ -36,12 +36,12 @@ Set-Location $SCRIPT_DIR
 Write-Info "Working directory: $SCRIPT_DIR"
 Write-Host ""
 
-# Step 1: Check and install conda if needed
+# Step 1: Check for existing conda installation (Anaconda or Miniconda)
 Write-Info "Checking for conda installation..."
 $condaExists = $null -ne (Get-Command conda -ErrorAction SilentlyContinue)
 
 if (-not $condaExists) {
-    Write-Warning "conda not found!"
+    Write-Warning "conda not found (neither Anaconda nor Miniconda)!"
     Write-Host ""
     $install = Read-Host "Do you want to install Miniconda? (y/N)"
 
@@ -75,8 +75,20 @@ if (-not $condaExists) {
         exit 1
     }
 } else {
+    # Detect if it's Anaconda or Miniconda
+    $condaPath = (Get-Command conda).Source
     $condaVersion = (conda --version 2>&1)
-    Write-Success "conda found: $condaVersion"
+
+    if ($condaPath -match "anaconda") {
+        Write-Success "Anaconda detected: $condaVersion"
+        Write-Info "Using existing Anaconda installation"
+    } elseif ($condaPath -match "miniconda") {
+        Write-Success "Miniconda detected: $condaVersion"
+        Write-Info "Using existing Miniconda installation"
+    } else {
+        Write-Success "conda found: $condaVersion"
+        Write-Info "Using existing conda installation"
+    }
 }
 Write-Host ""
 

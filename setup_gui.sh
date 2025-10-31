@@ -41,10 +41,10 @@ cd "$SCRIPT_DIR"
 print_info "Working directory: $SCRIPT_DIR"
 echo ""
 
-# Step 1: Check and install conda if needed
+# Step 1: Check for existing conda installation (Anaconda or Miniconda)
 print_info "Checking for conda installation..."
 if ! command -v conda &> /dev/null; then
-    print_warning "conda not found!"
+    print_warning "conda not found (neither Anaconda nor Miniconda)!"
     echo ""
     read -p "Do you want to install Miniconda? (y/N): " -n 1 -r
     echo
@@ -90,7 +90,19 @@ if ! command -v conda &> /dev/null; then
         exit 1
     fi
 else
-    print_success "conda found: $(conda --version)"
+    # Detect if it's Anaconda or Miniconda
+    CONDA_PATH=$(which conda)
+    CONDA_VERSION=$(conda --version)
+    if [[ "$CONDA_PATH" == *"anaconda"* ]]; then
+        print_success "Anaconda detected: $CONDA_VERSION"
+        print_info "Using existing Anaconda installation"
+    elif [[ "$CONDA_PATH" == *"miniconda"* ]]; then
+        print_success "Miniconda detected: $CONDA_VERSION"
+        print_info "Using existing Miniconda installation"
+    else
+        print_success "conda found: $CONDA_VERSION"
+        print_info "Using existing conda installation"
+    fi
 fi
 echo ""
 
