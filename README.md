@@ -37,7 +37,7 @@ chmod +x setup_gui.sh
 ./run_smoothie_gui.sh
 ```
 
-The GUI provides an intuitive interface with forms, real-time plotting, and output monitoring. See the [GUI section](#-graphical-user-interface-gui) below for details.
+The GUI provides an intuitive interface with forms, real-time plotting, and output monitoring. See the [GUI section](#graphical-user-interface-gui) below for details.
 
 ### Option 2: Command-Line Installation
 
