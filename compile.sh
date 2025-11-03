@@ -177,27 +177,24 @@ fi
 if [ -n "$SELECTED_COMPILER" ]; then
     print_info "Configuring make.inc for $SELECTED_COMPILER..."
 
-    if [ ! -f "make.inc" ]; then
-        if [ "$SELECTED_COMPILER" = "ifort" ] && [ -f "make.inc.ifort" ]; then
+    # Always use the full template for the selected compiler
+    if [ "$SELECTED_COMPILER" = "ifort" ]; then
+        if [ -f "make.inc.ifort" ]; then
             cp make.inc.ifort make.inc
-            print_success "Created make.inc from make.inc.ifort"
-        elif [ -f "make.inc.gfortran" ]; then
-            cp make.inc.gfortran make.inc
-            print_success "Created make.inc from make.inc.gfortran"
+            print_success "Using make.inc.ifort template (Intel compiler flags)"
         else
-            print_error "Template make.inc file not found!"
+            print_error "make.inc.ifort template not found!"
             exit 1
         fi
     else
-        # Update existing make.inc
-        if [ "$SELECTED_COMPILER" = "ifort" ]; then
-            sed -i.bak 's/^FC = .*/FC = ifort/' make.inc
-            sed -i.bak 's/^F90 = .*/F90 = ifort/' make.inc
+        # gfortran
+        if [ -f "make.inc.gfortran" ]; then
+            cp make.inc.gfortran make.inc
+            print_success "Using make.inc.gfortran template (GNU compiler flags)"
         else
-            sed -i.bak 's/^FC = .*/FC = gfortran/' make.inc
-            sed -i.bak 's/^F90 = .*/F90 = gfortran/' make.inc
+            print_error "make.inc.gfortran template not found!"
+            exit 1
         fi
-        print_success "Updated make.inc to use $SELECTED_COMPILER"
     fi
 fi
 
