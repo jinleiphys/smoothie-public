@@ -41,10 +41,10 @@ cd "$SCRIPT_DIR"
 print_info "Working directory: $SCRIPT_DIR"
 echo ""
 
-# Step 1: Check for existing conda installation (Anaconda or Miniconda)
+# Step 1: Check and install conda if needed
 print_info "Checking for conda installation..."
 if ! command -v conda &> /dev/null; then
-    print_warning "conda not found (neither Anaconda nor Miniconda)!"
+    print_warning "conda not found!"
     echo ""
     read -p "Do you want to install Miniconda? (y/N): " -n 1 -r
     echo
@@ -70,7 +70,20 @@ if ! command -v conda &> /dev/null; then
         # Download and install Miniconda
         TEMP_INSTALLER="/tmp/miniconda_installer.sh"
         print_info "Downloading Miniconda from $MINICONDA_URL..."
-        curl -L -o "$TEMP_INSTALLER" "$MINICONDA_URL"
+
+        # Check for download tools and use the first available one
+        if command -v curl &> /dev/null; then
+            curl -L -o "$TEMP_INSTALLER" "$MINICONDA_URL"
+        elif command -v wget &> /dev/null; then
+            wget -O "$TEMP_INSTALLER" "$MINICONDA_URL"
+        else
+            print_error "Neither curl nor wget found!"
+            print_error "Please install one of them first:"
+            echo "  Ubuntu/Debian: sudo apt-get install curl"
+            echo "  CentOS/RHEL:   sudo yum install curl"
+            echo "  macOS:         brew install curl"
+            exit 1
+        fi
 
         print_info "Running Miniconda installer..."
         bash "$TEMP_INSTALLER" -b -p "$HOME/miniconda3"
@@ -83,6 +96,12 @@ if ! command -v conda &> /dev/null; then
         # Source conda for current session
         source "$HOME/miniconda3/etc/profile.d/conda.sh"
 
+        # Accept conda Terms of Service automatically
+        print_info "Accepting conda Terms of Service..."
+        conda config --set channel_priority flexible 2>/dev/null || true
+        conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main 2>/dev/null || true
+        conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r 2>/dev/null || true
+
         print_success "Miniconda installed successfully!"
         print_warning "Please restart your terminal or run: source ~/.bashrc (or ~/.zshrc)"
     else
@@ -90,19 +109,12 @@ if ! command -v conda &> /dev/null; then
         exit 1
     fi
 else
-    # Detect if it's Anaconda or Miniconda
-    CONDA_PATH=$(which conda)
-    CONDA_VERSION=$(conda --version)
-    if [[ "$CONDA_PATH" == *"anaconda"* ]]; then
-        print_success "Anaconda detected: $CONDA_VERSION"
-        print_info "Using existing Anaconda installation"
-    elif [[ "$CONDA_PATH" == *"miniconda"* ]]; then
-        print_success "Miniconda detected: $CONDA_VERSION"
-        print_info "Using existing Miniconda installation"
-    else
-        print_success "conda found: $CONDA_VERSION"
-        print_info "Using existing conda installation"
-    fi
+    print_success "conda found: $(conda --version)"
+
+    # Accept conda Terms of Service (in case not already accepted)
+    print_info "Ensuring conda Terms of Service are accepted..."
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main 2>/dev/null || true
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r 2>/dev/null || true
 fi
 echo ""
 
