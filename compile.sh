@@ -203,7 +203,144 @@ fi
 
 echo ""
 
-# Step 2: Select compilation mode
+# Step 2: Check and configure LAPACK libraries
+print_step "Checking for LAPACK libraries..."
+LAPACK_FOUND=false
+LAPACK_SOURCE=""
+
+# Check for LAPACK in common locations
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: Check multiple sources in order of preference
+
+    # 1. Check Homebrew installation
+    if [ -d "/opt/homebrew/opt/lapack" ] && [ -f "/opt/homebrew/opt/lapack/lib/liblapack.dylib" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="Homebrew (/opt/homebrew/opt/lapack)"
+    elif [ -d "/usr/local/opt/lapack" ] && [ -f "/usr/local/opt/lapack/lib/liblapack.dylib" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="Homebrew (/usr/local/opt/lapack)"
+    # 2. Check MacPorts installation
+    elif [ -f "/opt/local/lib/liblapack.dylib" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="MacPorts (/opt/local/lib)"
+    # 3. Check Accelerate framework
+    elif [ -f "/System/Library/Frameworks/Accelerate.framework/Accelerate" ] || \
+         [ -f "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Accelerate.framework/Accelerate" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="macOS Accelerate framework"
+    fi
+
+    if [ "$LAPACK_FOUND" = true ]; then
+        print_success "LAPACK found (via $LAPACK_SOURCE)"
+    fi
+else
+    # Linux: check for liblapack
+    if ldconfig -p 2>/dev/null | grep -q liblapack; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="system ldconfig"
+        print_success "LAPACK found (via $LAPACK_SOURCE)"
+    elif [ -f "/usr/lib/liblapack.so" ] || \
+         [ -f "/usr/lib64/liblapack.so" ] || \
+         [ -f "/usr/lib/x86_64-linux-gnu/liblapack.so" ]; then
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="system libraries"
+        print_success "LAPACK found (via $LAPACK_SOURCE)"
+    fi
+fi
+
+# If not found, offer to install via conda
+if [ "$LAPACK_FOUND" = false ]; then
+    print_warning "LAPACK libraries not found!"
+    echo ""
+    read -p "Do you want to install LAPACK via conda? (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        print_info "Installing LAPACK..."
+
+        # Initialize conda if not already done
+        if ! command -v conda &> /dev/null; then
+            source "$HOME/miniconda3/etc/profile.d/conda.sh"
+        fi
+
+        # Install LAPACK and BLAS via conda
+        print_info "Installing LAPACK/BLAS via conda-forge..."
+        conda install -y -c conda-forge openblas lapack
+
+        print_success "LAPACK installed successfully!"
+        LAPACK_FOUND=true
+        LAPACK_SOURCE="conda-forge"
+    else
+        print_warning "LAPACK is required for optimal performance. Continuing anyway..."
+        print_info "You may need to install LAPACK manually later."
+    fi
+fi
+echo ""
+
+# Configure make.inc with LAPACK paths
+print_info "Configuring make.inc for your system..."
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS: Configure based on detected LAPACK source
+    # Check if Accelerate framework is available
+    ACCELERATE_AVAILABLE=false
+    if [ -d "/System/Library/Frameworks/Accelerate.framework" ]; then
+        ACCELERATE_AVAILABLE=true
+    fi
+
+    if [[ "$LAPACK_SOURCE" == *"Homebrew"* ]]; then
+        # Homebrew LAPACK detected
+        if [ -d "/opt/homebrew/opt/lapack" ]; then
+            LAPACK_PATH="/opt/homebrew/opt/lapack/lib"
+        else
+            LAPACK_PATH="/usr/local/opt/lapack/lib"
+        fi
+
+        # On macOS, Accelerate framework is highly optimized by Apple
+        if [ "$ACCELERATE_AVAILABLE" = true ]; then
+            print_info "Both Homebrew LAPACK and Accelerate framework are available"
+            print_info "Using Accelerate framework (recommended for macOS)"
+            LAPACK_LIB="-framework Accelerate"
+        else
+            LAPACK_LIB="-L$LAPACK_PATH -llapack -lblas"
+        fi
+    elif [[ "$LAPACK_SOURCE" == *"MacPorts"* ]]; then
+        # MacPorts LAPACK detected
+        if [ "$ACCELERATE_AVAILABLE" = true ]; then
+            print_info "Both MacPorts LAPACK and Accelerate framework are available"
+            print_info "Using Accelerate framework (recommended for macOS)"
+            LAPACK_LIB="-framework Accelerate"
+        else
+            LAPACK_LIB="-L/opt/local/lib -llapack"
+        fi
+    elif [ "$ACCELERATE_AVAILABLE" = true ]; then
+        # Use Accelerate framework only
+        LAPACK_LIB="-framework Accelerate"
+        print_info "Using macOS Accelerate framework"
+    else
+        print_warning "No LAPACK library found on macOS"
+        LAPACK_LIB=""
+    fi
+else
+    # Linux: Check for conda-installed LAPACK first
+    CONDA_BASE=$(conda info --base 2>/dev/null)
+    if [ -n "$CONDA_BASE" ] && [ -f "$CONDA_BASE/lib/libopenblas.so" ]; then
+        LAPACK_LIB="-L$CONDA_BASE/lib -lopenblas -llapack"
+    elif [ -f "/usr/lib/liblapack.so" ] || [ -f "/usr/lib64/liblapack.so" ]; then
+        LAPACK_LIB="-llapack -lblas"
+    elif [ -f "/usr/lib/x86_64-linux-gnu/liblapack.so" ]; then
+        LAPACK_LIB="-llapack -lblas"
+    else
+        LAPACK_LIB="-llapack"
+    fi
+fi
+
+# Update LIBSTD1 in make.inc
+sed -i.bak "s|^LIBSTD1 =.*|LIBSTD1 = $LAPACK_LIB|" make.inc
+print_success "Updated make.inc with LAPACK configuration: $LAPACK_LIB"
+
+echo ""
+
+# Step 3: Select compilation mode
 print_step "Select compilation mode:"
 echo ""
 echo "  1) Compile without GUI"
@@ -213,7 +350,7 @@ read -p "Enter your choice [1-2]: " -n 1 -r COMPILE_CHOICE
 echo ""
 echo ""
 
-# Step 3: Compile based on choice
+# Step 4: Compile based on choice
 if [ "$COMPILE_CHOICE" = "2" ]; then
     print_info "Running GUI setup script..."
     bash setup_gui.sh
