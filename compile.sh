@@ -335,6 +335,12 @@ fi
 sed -i.bak "s|^LIBSTD1 =.*|LIBSTD1 = $LAPACK_LIB|" make.inc
 print_success "Updated make.inc with LAPACK configuration: $LAPACK_LIB"
 
+# Remove -pg flag for gfortran on macOS (gcrt1.o not available on modern macOS)
+if [[ "$OSTYPE" == "darwin"* ]] && [ "$SELECTED_COMPILER" = "gfortran" ]; then
+    print_info "Removing -pg flag (gfortran profiling not supported on modern macOS)..."
+    sed -i.bak2 "s/-pg//g" make.inc
+fi
+
 echo ""
 
 # Step 3: Select compilation mode
