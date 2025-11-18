@@ -170,7 +170,6 @@ smoothie-public/
 │   ├── pot.f             # Main potential interface and dispatcher
 │   ├── kd02.f            # Koning-Delaroche (2002) global potential
 │   ├── ch89.f            # Chapel-Hill 89 global potential
-│   ├── daehnick.f        # Daehnick potential
 │   └── yyq06.f           # YYQ06 potential model
 │
 ├── smoothie/             # Main calculation engine
