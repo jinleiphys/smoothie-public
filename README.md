@@ -143,6 +143,91 @@ For detailed GUI documentation, see [`smoothie_gui/README.md`](smoothie_gui/READ
 
 ---
 
+## 📁 Project Structure
+
+```
+smoothie-public/
+├── general_modules/       # Core Fortran modules
+│   ├── precision.F90     # Precision definitions (double/quadruple precision)
+│   ├── constants.F90     # Physical and mathematical constants
+│   ├── systems.f         # System properties and particle data
+│   └── channels.f        # Channel coupling and reaction definitions
+│
+├── mesh_modules/         # Numerical integration and mesh handling
+│   ├── angular.f         # Angular momentum coupling
+│   ├── interpolation.f   # Interpolation routines
+│   └── gaussleg.f        # Gaussian-Legendre quadrature
+│
+├── pw_modules/           # Partial wave calculations
+│   ├── coulomb.f         # Coulomb wave functions
+│   ├── spherharm.f       # Spherical harmonics
+│   └── clebsch.f         # Clebsch-Gordan coefficients
+│
+├── pot_modules/          # Optical potential models
+│   ├── pot.f             # Main potential interface
+│   ├── woods_saxon.f     # Woods-Saxon form factors
+│   ├── KD02.f            # Koning-Delaroche global potential
+│   └── CH89.f            # Chapel-Hill 89 global potential
+│
+├── smoothie/             # Main calculation engine
+│   ├── smoothie.F        # Main program entry point
+│   ├── iavdwbarbx.f      # DWBA=1 method (rbx variable, no spins)
+│   ├── iavdwbarb.f       # DWBA=2 method (rb variable, no spins)
+│   ├── iavdwbarbspin.f   # DWBA=3 method (rb variable, with spins)
+│   ├── plm_cache.f       # PLM caching optimization (5-10x speedup)
+│   ├── green.f           # Green's function calculations
+│   ├── bound.f           # Bound state wave functions
+│   ├── test/             # Test cases and examples
+│   │   ├── test.in       # Basic deuteron breakup test
+│   │   └── 11Be64Zn.in   # 11Be + 64Zn reaction example
+│   └── Makefile          # Build configuration
+│
+├── cm2lab/               # Center-of-mass to lab frame converter
+│   ├── cm2lab.F          # Main conversion program
+│   └── test/             # Conversion test cases
+│
+├── smoothie_gui/         # Python-based graphical user interface
+│   ├── main.py           # GUI entry point
+│   ├── main_window.py    # Main window implementation
+│   ├── input_panel.py    # Input parameter forms
+│   ├── plot_widget.py    # Real-time plotting
+│   ├── log_widget.py     # Output monitoring
+│   └── requirements.txt  # Python dependencies
+│
+├── make.inc              # Active compiler configuration
+├── make.inc.gfortran     # GNU Fortran template
+├── make.inc.ifort        # Intel Fortran template
+├── dir.inc               # Module directory definitions
+├── compile.sh            # Automated compilation script
+├── setup_gui.sh          # GUI environment setup (Linux/macOS)
+├── setup_gui.ps1         # GUI environment setup (Windows)
+└── run_smoothie_gui.sh   # GUI launcher script
+```
+
+### Key Directories
+
+| Directory | Purpose | Key Features |
+|-----------|---------|--------------|
+| **general_modules/** | Foundation modules | Precision control, physical constants, system data structures |
+| **mesh_modules/** | Numerical methods | Integration grids, interpolation, quadrature schemes |
+| **pw_modules/** | Angular momentum | Coulomb functions, spherical harmonics, quantum coupling |
+| **pot_modules/** | Interaction potentials | Woods-Saxon, global potentials (KD02, CH89), external files |
+| **smoothie/** | Main engine | Five DWBA methods, Green's functions, PLM caching |
+| **cm2lab/** | Utility | Frame transformation for experimental comparison |
+| **smoothie_gui/** | User interface | Modern Qt-based GUI with plotting and monitoring |
+
+### Build System Files
+
+| File | Purpose |
+|------|---------|
+| `make.inc` | Active compiler configuration (copied from templates) |
+| `make.inc.gfortran` | GNU Fortran configuration template |
+| `make.inc.ifort` | Intel Fortran configuration template |
+| `dir.inc` | Module directory paths |
+| `compile.sh` | Automated build script with library detection |
+
+---
+
 ## 📋 Input File Structure
 
 SMOOTHIE uses Fortran namelist format with the following main sections:
